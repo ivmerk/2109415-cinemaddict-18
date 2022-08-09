@@ -1,7 +1,7 @@
 # Проект «Киноман»
 
 * Студент: [Ivan Merkulov](https://up.htmlacademy.ru/ecmascript/18/user/2109415).
-* Наставник: `Неизвестно`.
+* Наставник: [Дмитрий Гуляев](https://htmlacademy.ru/profile/dima).
 
 ---
 
