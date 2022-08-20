@@ -1,17 +1,20 @@
-import {createElement} from '../render';
+import { createElement } from '../render';
 
 const createFilmsViewTemplate = () => '<section class="films"><section>';
 
 export default class FilmsView {
-  getTemplate() {
+
+  #element = null;
+
+  get #template() {
     return createFilmsViewTemplate();
   }
 
-  getElement() {
-    if(!this.element) {
-      this.element = createElement(this.getTemplate());
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.#template);
     }
-    return this.element;
+    return this.#element;
   }
 
   removeElement() {

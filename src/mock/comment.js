@@ -1,15 +1,28 @@
-import { getRandomInteger } from '../utils.js';
+import { getRandomInteger, getRandomValue } from '../utils.js';
+import { comment, DayDuration, emotions, writers } from './const.js';
+import dayjs from 'dayjs';
 
-const generateEmotion = () => {
-  const emotions = ['smile', 'sleeping', 'puke', 'angry'];
-  const randomIndex = getRandomInteger(0, emotions.length - 1);
-  return emotions[randomIndex];
-};
 
-export const createComment = () =>({
-  'id': '42',
-  'author': 'Ilya O\'Reilly',
-  'comment': 'a film that changed my life, a true masterpiece, post-credit scene was just amazing omg.',
-  'date': '2019-05-11T16:12:32.554Z',
-  'emotion': generateEmotion(),
+const createComment = () => ({
+  author: getRandomValue(writers),
+  comment,
+  date: dayjs().subtract(getRandomInteger(DayDuration.MIN, DayDuration.MAX), 'day').toISOString(),
+  emotion: getRandomValue(emotions),
 });
+
+const getCommentCount = (cards) => cards.reduce(
+  (count, card) => count + card.comments.length, 0
+);
+
+export const generateCommenst = (cards) => {
+  const commentCount = getCommentCount(cards);
+
+  return Array.from({ length: commentCount }, (_value, index) => {
+    const commentItem = createComment();
+
+    return {
+      id: String(index + 1),
+      ...commentItem,
+    };
+  });
+};
