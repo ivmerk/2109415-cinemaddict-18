@@ -1,17 +1,20 @@
-import {createElement} from '../render';
+import { createElement } from '../render';
 
-const createFilmsListViewTemplate = () => '<section class="films-list"></section>';
+const createFilmsListViewTemplate = () => '<section class="films-list"><h2 class="films-list__title visually-hidden">All movies. Upcoming</h2></section>';
 
 export default class FilmsListView {
-  getTemplate() {
+
+  #element = null;
+
+  get #template() {
     return createFilmsListViewTemplate();
   }
 
-  getElement() {
-    if(!this.element) {
-      this.element = createElement(this.getTemplate());
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.#template);
     }
-    return this.element;
+    return this.#element;
   }
 
   removeElement() {

@@ -1,37 +1,50 @@
-export const generateMovieCard = () => ({
-  'id': '0',
-  'comments': [
-    'id42', 'id42'
-  ],
-  'film_info': {
-    'title': 'A Little Pony Without The Carpet',
-    'alternative_title': 'Laziness Who Sold Themselves',
-    'total_rating': 5.3,
-    'poster': 'images/posters/made-for-each-other.png',
-    'age_rating': 0,
-    'director': 'Tom Ford',
-    'writers': [
-      'Takeshi Kitano'
-    ],
-    'actors': [
-      'Morgan Freeman',
-      'Arnold Schwarzenegger'
-    ],
-    'release': {
-      'date': '2019-05-11T00:00:00.000Z',
-      'release_country': 'Finland'
-    },
-    'runtime': 77,
-    'genre': [
-      'Comedy',
-      'Triller'
-    ],
-    'description': 'Oscar-winning film, a war drama about two young people, from the creators of timeless classic "Nu, Pogodi!" and "Alice in Wonderland", with the best fight scenes since Bruce Lee.'
+import dayjs from 'dayjs';
+import { getRandomInteger, getRandomValue, getRandomFloat } from '../utils.js';
+import { MAX_COMMENTS_ON_FILM, GenreCount, Rating, AgeRating, Runtime, description, titles, posters, countries, directors, writers, actors, NAME_COUNT, YearDuration, genres, FILM_COUNT } from './const.js';
+
+
+const generateMovieCard = () => ({
+  // id: '0',
+  // comments: [
+  //   'id42', 'id42'
+  // ],
+  title: getRandomValue(titles),
+  alternativeTitle: getRandomValue(titles),
+  totalRating: getRandomFloat(Rating.MAX),
+  poster: getRandomValue(posters),
+  ageRating: getRandomInteger(AgeRating.MAX),
+  director: getRandomValue(directors),
+  writers: Array.from({ length: getRandomInteger(1, NAME_COUNT) }, () => getRandomValue(writers)),
+  actors: Array.from({ length: getRandomInteger(1, NAME_COUNT) }, () => getRandomValue(actors)),
+  release: {
+    date: dayjs().subtract(getRandomInteger(YearDuration.MIN, YearDuration.MAX), 'year').toISOString(),
+    releaseCountry: getRandomValue(countries),
   },
-  'user_details': {
-    'watchlist': false,
-    'already_watched': true,
-    'watching_date': '2019-04-12T16:12:32.554Z',
-    'favorite': false
-  }
+  runtime: getRandomInteger(Runtime.MIN, Runtime.MAX),
+  genre: Array.from({ length: getRandomInteger(GenreCount.MIN, GenreCount.MAX) }, () => getRandomValue(genres)),
+  description,
+  // userDetails: {
+  //   watchlist: false,
+  //   alreadyWatched: true,
+  //   watchingDate: '2019-04-12T16:12:32.554Z',
+  //   favorite: false
+  // }
 });
+
+export const generateMovieList = () => {
+  const cards = Array.from({ length: FILM_COUNT }, generateMovieCard);
+
+  let totalCommentCount = 0;
+
+  return cards.map((film, index) => {
+    const hasComments = getRandomInteger();
+
+    const cardCommentCount = (hasComments) ? getRandomInteger(1, MAX_COMMENTS_ON_FILM) : 0;
+    totalCommentCount += cardCommentCount;
+    return {
+      id: String(index + 1),
+      comments: (hasComments) ? Array.from({ length: totalCommentCount }, (_value, commentIndex) => String(totalCommentCount - commentIndex)) : [],
+      filmInfo: film,
+    };
+  });
+};
