@@ -1,7 +1,9 @@
 
 const MAX_COMMENTS_ON_FILM = 5;
 
-const FILM_COUNT = 5;
+const FILM_COUNT = 13;
+
+const FILM_COUNT_PER_STEP = 5;
 
 const NAME_COUNT = 3;
 

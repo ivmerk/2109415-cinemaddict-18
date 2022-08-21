@@ -8,13 +8,13 @@ import CommentsModel from './model/comments-model.js';
 const siteMainElement = document.querySelector('.main');
 const siteHeaderElement = document.querySelector('.header');
 
-const filmsListPresenter = new FilmsListPresenter();
 
 const filmsModel = new FilmsModel();
-
 const commentsModel = new CommentsModel(filmsModel);
+
 render(new ProfileRatingView(), siteHeaderElement);
 render(new FilltersMenuView(), siteMainElement);
 
-filmsListPresenter.init(siteMainElement, filmsModel, commentsModel);
+const filmsListPresenter = new FilmsListPresenter(siteMainElement, filmsModel, commentsModel);
+filmsListPresenter.init();
 
