@@ -1,13 +1,13 @@
 import { getRandomInteger, getRandomValue } from '../utils.js';
-import { comment, DayDuration, emotions, writers } from './const.js';
+import { COMMENT, DAYDURATION, EMOTIONS, WRITERS } from './const.js';
 import dayjs from 'dayjs';
 
 
 const createComment = () => ({
-  author: getRandomValue(writers),
-  comment,
-  date: dayjs().subtract(getRandomInteger(DayDuration.MIN, DayDuration.MAX), 'day').toISOString(),
-  emotion: getRandomValue(emotions),
+  author: getRandomValue(WRITERS),
+  COMMENT,
+  date: dayjs().subtract(getRandomInteger(DAYDURATION.MIN, DAYDURATION.MAX), 'day').toISOString(),
+  emotion: getRandomValue(EMOTIONS),
 });
 
 const getCommentCount = (cards) => cards.reduce(

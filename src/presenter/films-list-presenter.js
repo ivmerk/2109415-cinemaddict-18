@@ -22,7 +22,6 @@ export default class FilmsListPresenter {
 
   constructor(filmsListContainer, filmsModel, commentsModel) {
     this.#filmsListContainer = filmsListContainer;
-    console.log(this.#filmsListContainer);
     this.#filmsModel = filmsModel;
     this.#commentsModel = commentsModel;
   }
@@ -33,12 +32,9 @@ export default class FilmsListPresenter {
     render(this.#filmsListComponent, this.#filmsListContainer);
     render(this.#listCardsView, this.#filmsListComponent.element);
 
-    // const cardsContainer = this.#filmsListComponent.element.querySelector('.films-list__container');
-    // console.log(cardsContainer);
     this.#films.slice(0, this.#renderedFilmCount).forEach((film) => {
       this.#renderFilm(film, this.#listCardsView.element);
     });
-    // debugger
     if (this.#renderedFilmCount < FILM_COUNT) {
       render(this.#showMoreFilmsButtonComponent, this.#filmsListComponent.element);
       this.#showMoreFilmsButtonComponent.element.addEventListener('click', this.#filmButtonMoreClickHandler);
@@ -46,7 +42,7 @@ export default class FilmsListPresenter {
   };
 
   #renderFilm = (film, container) => {
-    const commentsCount = [...this.#commentsModel.get(film)].length;
+    const commentsCount = [this.#commentsModel.get(film)].length;
     const filmCardComponent = new FilmCardView(film, commentsCount);
 
     const linkFilmCardElement = filmCardComponent.element.querySelector('a');
@@ -97,13 +93,11 @@ export default class FilmsListPresenter {
 
     this.#renderedFilmCount += FILM_COUNT_PER_STEP;
 
-    // debugger
     if (this.#renderedFilmCount >= this.#films.length) {
       this.#showMoreFilmsButtonComponent.element.remove();
       this.#showMoreFilmsButtonComponent.removeElement();
 
     }
-    console.log(this.#showMoreFilmsButtonComponent);
   };
 
 }

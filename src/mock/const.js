@@ -3,41 +3,39 @@ const MAX_COMMENTS_ON_FILM = 5;
 
 const FILM_COUNT = 13;
 
-const FILM_COUNT_PER_STEP = 5;
-
 const NAME_COUNT = 3;
 
-const GenreCount = {
+const GENRECOUNT = {
   MIN: 1,
   MAX: 3
 };
 
-const Rating = {
+const RATING = {
   MIN: 0,
   MAX: 10,
 };
 
-const AgeRating = {
+const AGERATING = {
   MIN: 0,
   MAX: 18
 };
 
-const Runtime = {
+const RUNTIME = {
   MIN: 60,
   MAX: 180
 };
 
-const YearDuration = {
+const YEARDURATION = {
   MIN: 2,
   MAX: 82
 };
 
-const DayDuration = {
+const DAYDURATION = {
   MIN: 0,
   MAX: 100
 };
 
-const titles = [
+const TITLES = [
   'The Dance of Life',
   'Sagebrush Trail',
   'The Man with the Golden Arm',
@@ -45,7 +43,7 @@ const titles = [
   'Popeye the Sailor Meets Sindbad the Sailor',
 ];
 
-const posters = [
+const POSTERS = [
   'images/posters/made-for-each-other.png',
   'images/posters/popeye-meets-sinbad.png',
   'images/posters/sagebrush-trail.jpg',
@@ -55,7 +53,7 @@ const posters = [
   'images/posters/the-man-with-the-golden-arm.jpg',
 ];
 
-const directors = [
+const DIRECTORS = [
   'Takeshi Kitano',
   'Neil Affleck',
   'Ned Ambler',
@@ -67,7 +65,7 @@ const directors = [
   'J. D. Dillard',
 ];
 
-const writers = [
+const WRITERS = [
   'William Shakespeare',
   'Fyodor Dostoevsky',
   'Leo Tolstoy',
@@ -80,7 +78,7 @@ const writers = [
   'George Orwell',
 ];
 
-const actors = [
+const ACTORS = [
   'Robert De Niro',
   'Jack Nicholson',
   'Marlon Brando',
@@ -95,7 +93,7 @@ const actors = [
   'Arnold Schwarzenegger'
 ];
 
-const countries = [
+const COUNTRIES = [
   'USA',
   'USSR',
   'India',
@@ -103,16 +101,36 @@ const countries = [
   'France'
 ];
 
-const genres = [
+const GENRES = [
   'Comedy',
   'Triller',
   'Drama'
 ];
 
-const emotions = ['smile', 'sleeping', 'puke', 'angry'];
+const EMOTIONS = ['smile', 'sleeping', 'puke', 'angry'];
 
-const description = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.';
+const DESCRIPTION = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.';
 
-const comment = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.';
+const COMMENT = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.';
 
-export { MAX_COMMENTS_ON_FILM, FILM_COUNT, NAME_COUNT, GenreCount, Rating, AgeRating, emotions, comment, description, genres, Runtime, titles, posters, countries, directors, writers, actors, YearDuration, DayDuration };
+export {
+  MAX_COMMENTS_ON_FILM,
+  FILM_COUNT,
+  NAME_COUNT,
+  GENRECOUNT,
+  RATING,
+  AGERATING,
+  EMOTIONS,
+  COMMENT,
+  DESCRIPTION,
+  GENRES,
+  RUNTIME,
+  TITLES,
+  POSTERS,
+  YEARDURATION,
+  DIRECTORS,
+  WRITERS,
+  ACTORS,
+  COUNTRIES,
+  DAYDURATION
+};
