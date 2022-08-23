@@ -1,34 +1,24 @@
 import dayjs from 'dayjs';
 import { getRandomInteger, getRandomValue, getRandomFloat } from '../utils.js';
-import { MAX_COMMENTS_ON_FILM, GenreCount, Rating, AgeRating, Runtime, description, titles, posters, countries, directors, writers, actors, NAME_COUNT, YearDuration, genres, FILM_COUNT } from './const.js';
-
+import { MAX_COMMENTS_ON_FILM, GENRECOUNT, RATING, AGERATING, RUNTIME, DESCRIPTION, TITLES, POSTERS, COUNTRIES, DIRECTORS, WRITERS, ACTORS, NAME_COUNT, YEARDURATION, GENRES } from './const.js';
+import { FILM_COUNT } from '../const.js';
 
 const generateMovieCard = () => ({
-  // id: '0',
-  // comments: [
-  //   'id42', 'id42'
-  // ],
-  title: getRandomValue(titles),
-  alternativeTitle: getRandomValue(titles),
-  totalRating: getRandomFloat(Rating.MAX),
-  poster: getRandomValue(posters),
-  ageRating: getRandomInteger(AgeRating.MAX),
-  director: getRandomValue(directors),
-  writers: Array.from({ length: getRandomInteger(1, NAME_COUNT) }, () => getRandomValue(writers)),
-  actors: Array.from({ length: getRandomInteger(1, NAME_COUNT) }, () => getRandomValue(actors)),
+  title: getRandomValue(TITLES),
+  alternativeTitle: getRandomValue(TITLES),
+  totalRating: getRandomFloat(RATING.MAX),
+  poster: getRandomValue(POSTERS),
+  ageRating: getRandomInteger(AGERATING.MAX),
+  director: getRandomValue(DIRECTORS),
+  writers: Array.from({ length: getRandomInteger(1, NAME_COUNT) }, () => getRandomValue(WRITERS)),
+  actors: Array.from({ length: getRandomInteger(1, NAME_COUNT) }, () => getRandomValue(ACTORS)),
   release: {
-    date: dayjs().subtract(getRandomInteger(YearDuration.MIN, YearDuration.MAX), 'year').toISOString(),
-    releaseCountry: getRandomValue(countries),
+    date: dayjs().subtract(getRandomInteger(YEARDURATION.MIN, YEARDURATION.MAX), 'year').toISOString(),
+    releaseCountry: getRandomValue(COUNTRIES),
   },
-  runtime: getRandomInteger(Runtime.MIN, Runtime.MAX),
-  genre: Array.from({ length: getRandomInteger(GenreCount.MIN, GenreCount.MAX) }, () => getRandomValue(genres)),
-  description,
-  // userDetails: {
-  //   watchlist: false,
-  //   alreadyWatched: true,
-  //   watchingDate: '2019-04-12T16:12:32.554Z',
-  //   favorite: false
-  // }
+  runtime: getRandomInteger(RUNTIME.MIN, RUNTIME.MAX),
+  genre: Array.from({ length: getRandomInteger(GENRECOUNT.MIN, GENRECOUNT.MAX) }, () => getRandomValue(GENRES)),
+  DESCRIPTION,
 });
 
 export const generateMovieList = () => {
