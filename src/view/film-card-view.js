@@ -1,4 +1,4 @@
-import { createElement } from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 import { formatMinutesToTime, formatStringToYear } from '../utils.js';
 
 
@@ -23,30 +23,33 @@ const createFilmCardTemplate = ({ filmInfo }, comments) =>
     </div>
   </article>`;
 
-export default class FilmCardView {
+export default class FilmCardView extends AbstractView {
 
   #film = null;
   #comments = null;
-  #element = null;
 
   constructor(film, comments) {
+    super();
     this.#film = film;
     this.#comments = comments;
   }
 
+  setCardClickHandler = (cb) => {
 
-  get #template() {
+    this._callback.click = cb;
+    this.element.children[0].addEventListener('click', this.#clickHandler);
+  };
+
+  #clickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.click();
+  };
+
+  get template() {
     return createFilmCardTemplate(this.#film, this.#comments);
   }
 
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.#template);
-    }
-    return this.#element;
-  }
-
-  removeElement() {
-    this.#element = null;
-  }
+  // get getFilm() {
+  //   return this.#film;
+  // }
 }
