@@ -46,21 +46,20 @@ export default class FilmsListPresenter {
     const commentsCount = [this.#commentsModel.get(film)].length;
     const filmCardComponent = new FilmCardView(film, commentsCount);
 
-    // filmCardComponent.setCardClickHandler(this.#filmCardClickHandler);
+    filmCardComponent.setCardClickHandler(this.#filmCardClickHandler);
 
-    const linkFilmCardElement = filmCardComponent.element.querySelector('a');
-    linkFilmCardElement.addEventListener('click', () => {
-      this.#addFilmDetailsComponent(film);
-      document.addEventListener('keydown', this.#onEscKeyDown);
-    });
+    // const linkFilmCardElement = filmCardComponent.element.querySelector('a');
+    // linkFilmCardElement.addEventListener('click', () => {
+    //   this.#addFilmDetailsComponent(film);
+    //   document.addEventListener('keydown', this.#onEscKeyDown);
+    // });
     render(filmCardComponent, container);
   };
 
-  // #filmCardClickHandler = () => {
-  //   console.log(getFilm);
-  //   // this.#addFilmDetailsComponent();
-  //   document.addEventListener('keydown', this.#onEscKeyDown);
-  // };
+  #filmCardClickHandler = (film) => {
+    this.#addFilmDetailsComponent(film);
+    document.addEventListener('keydown', this.#onEscKeyDown);
+  };
 
   #renderFilmDetails = (film) => {
     const comments = [...this.#commentsModel.get(this.#films[0])];
