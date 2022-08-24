@@ -14,9 +14,6 @@ export default class NavigationFilltersMenuView extends AbstractView {
     this.#filter = filter;
   }
 
-  showthefilter() {
-    console.log(this.#filter.favorites);
-  }
 
   get template() {
     return createFilltersMenuTemplate(this.#filter);

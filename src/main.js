@@ -22,4 +22,3 @@ render(new SortFilltersMenuView(navFilterList), siteMainElement);
 const filmsListPresenter = new FilmsListPresenter(siteMainElement, filmsModel, commentsModel);
 filmsListPresenter.init();
 
-console.log(navFilterList.showthefilter());
