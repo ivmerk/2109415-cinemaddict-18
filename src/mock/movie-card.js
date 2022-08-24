@@ -18,7 +18,7 @@ const generateMovieCard = () => ({
   },
   runtime: getRandomInteger(RUNTIME.MIN, RUNTIME.MAX),
   genre: Array.from({ length: getRandomInteger(GENRECOUNT.MIN, GENRECOUNT.MAX) }, () => getRandomValue(GENRES)),
-  DESCRIPTION,
+  description: DESCRIPTION,
 });
 
 export const generateMovieList = () => {

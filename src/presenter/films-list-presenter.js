@@ -37,7 +37,8 @@ export default class FilmsListPresenter {
     });
     if (this.#renderedFilmCount < FILM_COUNT) {
       render(this.#showMoreFilmsButtonComponent, this.#filmsListComponent.element);
-      this.#showMoreFilmsButtonComponent.element.addEventListener('click', this.#filmButtonMoreClickHandler);
+      this.#showMoreFilmsButtonComponent.setClickHandler(this.#filmButtonMoreClickHandler);
+      // this.#showMoreFilmsButtonComponent.element.addEventListener('click', this.#filmButtonMoreClickHandler);
     }
   };
 
@@ -45,20 +46,27 @@ export default class FilmsListPresenter {
     const commentsCount = [this.#commentsModel.get(film)].length;
     const filmCardComponent = new FilmCardView(film, commentsCount);
 
-    const linkFilmCardElement = filmCardComponent.element.querySelector('a');
-    linkFilmCardElement.addEventListener('click', () => {
-      this.#addFilmDetailsComponent(film);
-      document.addEventListener('keydown', this.#onEscKeyDown);
-    });
+    filmCardComponent.setCardClickHandler(this.#filmCardClickHandler);
+
+    // const linkFilmCardElement = filmCardComponent.element.querySelector('a');
+    // linkFilmCardElement.addEventListener('click', () => {
+    //   this.#addFilmDetailsComponent(film);
+    //   document.addEventListener('keydown', this.#onEscKeyDown);
+    // });
     render(filmCardComponent, container);
   };
 
+  #filmCardClickHandler = (film) => {
+    this.#addFilmDetailsComponent(film);
+    document.addEventListener('keydown', this.#onEscKeyDown);
+  };
 
   #renderFilmDetails = (film) => {
     const comments = [...this.#commentsModel.get(this.#films[0])];
     const siteBodyElement = document.querySelector('body');
     this.#filmDetailsComponent = new FilmDetailsView(film, comments);
     const closeButtonDetailsElement = this.#filmDetailsComponent.element.querySelector('.film-details__close-btn');
+
     closeButtonDetailsElement.addEventListener('click', () => {
       this.#removeFilmDetailsComponent();
       document.removeEventListener('keydown', this.#onEscKeyDown);
@@ -85,8 +93,7 @@ export default class FilmsListPresenter {
     }
   };
 
-  #filmButtonMoreClickHandler = (evt) => {
-    evt.preventDefault();
+  #filmButtonMoreClickHandler = () => {
     this.#films.slice(this.#renderedFilmCount, this.#renderedFilmCount + FILM_COUNT_PER_STEP).forEach((film) => {
       this.#renderFilm(film, this.#listCardsView.element);
     });
@@ -99,5 +106,4 @@ export default class FilmsListPresenter {
 
     }
   };
-
 }

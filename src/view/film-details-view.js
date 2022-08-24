@@ -1,4 +1,4 @@
-import { createElement } from '../render';
+import AbstractView from '../framework/view/abstract-view';
 import dayjs from 'dayjs';
 import { createFilmDetailsCommentsTemplate } from './film-details-comments-template';
 import { formatStringToYear } from '../utils';
@@ -115,28 +115,17 @@ const createFilmDetailsTemplate = ({ filmInfo }, comments) =>
     `;
 
 
-export default class FilmDetailsView {
+export default class FilmDetailsView extends AbstractView {
   #film = null;
   #comments = null;
-  #element = null;
 
   constructor(film, comments) {
+    super();
     this.#film = film;
     this.#comments = comments;
   }
 
-  get #template() {
+  get template() {
     return createFilmDetailsTemplate(this.#film, this.#comments);
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.#template);
-    }
-    return this.#element;
-  }
-
-  removeElement() {
-    this.element = null;
   }
 }
