@@ -49,7 +49,4 @@ export default class FilmCardView extends AbstractView {
     return createFilmCardTemplate(this.#film, this.#comments);
   }
 
-  // get getFilm() {
-  //   return this.#film;
-  // }
 }

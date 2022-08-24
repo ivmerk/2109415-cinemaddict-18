@@ -2,7 +2,7 @@ import ShowMoreButtonView from '../view/show-more-botton-view.js';
 import FilmCardView from '../view/film-card-view.js';
 import FilmsListView from '../view/films-list-view.js';
 import ListCardsView from '../view/list-cards-view.js';
-import { render } from '../render.js';
+import { render } from '../framework/render.js';
 import FilmDetailsView from '../view/film-details-view.js';
 import { FILM_COUNT, FILM_COUNT_PER_STEP } from '../const.js';
 
@@ -38,7 +38,6 @@ export default class FilmsListPresenter {
     if (this.#renderedFilmCount < FILM_COUNT) {
       render(this.#showMoreFilmsButtonComponent, this.#filmsListComponent.element);
       this.#showMoreFilmsButtonComponent.setClickHandler(this.#filmButtonMoreClickHandler);
-      // this.#showMoreFilmsButtonComponent.element.addEventListener('click', this.#filmButtonMoreClickHandler);
     }
   };
 
@@ -48,11 +47,6 @@ export default class FilmsListPresenter {
 
     filmCardComponent.setCardClickHandler(this.#filmCardClickHandler);
 
-    // const linkFilmCardElement = filmCardComponent.element.querySelector('a');
-    // linkFilmCardElement.addEventListener('click', () => {
-    //   this.#addFilmDetailsComponent(film);
-    //   document.addEventListener('keydown', this.#onEscKeyDown);
-    // });
     render(filmCardComponent, container);
   };
 
