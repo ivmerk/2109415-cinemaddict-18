@@ -1,4 +1,3 @@
-import ShowMoreButtonView from '../view/show-more-botton-view.js';
 import FilmsListView from '../view/films-list-view.js';
 import ListCardsView from '../view/list-cards-view.js';
 import { render } from '../framework/render.js';
@@ -9,12 +8,12 @@ import ShowMoreButtonPresenter from './show-more-botton-presenter.js';
 export default class FilmsListPresenter {
   #listCardsView = new ListCardsView();
   #filmsListComponent = new FilmsListView();
-  #showMoreFilmsButtonComponent = new ShowMoreButtonView();
   #filmsListContainer = null;
   #filmsModel = null;
   #commentsModel = null;
   #films = [];
-  #renderedFilmCount = FILM_COUNT_PER_STEP;
+  #renderedFilmCount = 0;
+  #showMoreBottonPresenter = null;
 
   constructor(filmsListContainer, filmsModel, commentsModel) {
     this.#filmsListContainer = filmsListContainer;
@@ -22,29 +21,50 @@ export default class FilmsListPresenter {
     this.#commentsModel = commentsModel;
   }
 
-  init = (cardsQtt = this.#renderedFilmCount) => {
-    this.#films = [...this.#filmsModel.get()];
+  init = () => {
 
+    this.#films = [...this.#filmsModel.get()];
     render(this.#filmsListComponent, this.#filmsListContainer);
     render(this.#listCardsView, this.#filmsListComponent.element);
 
-    this.#films.slice(0, cardsQtt).forEach((film) => {
-      this.#renderFilm(film);
-    });
-    debugger;
-    if (cardsQtt < FILM_COUNT) {
-      // render(this.#showMoreFilmsButtonComponent, this.#filmsListComponent.element);
-      // this.#showMoreFilmsButtonComponent.setClickHandler(this.#filmButtonMoreClickHandler);
-      const showMoreBottonPresenter = new ShowMoreButtonPresenter(this.#filmsListComponent.element);
-      showMoreBottonPresenter.init();
-    }
+    this.showMoreFilmCards();
+
   };
 
   #renderFilm = (film) => {
     const comments = this.#commentsModel.get(film);
     const filmCardPreseter = new FilmCardPresenter(this.#listCardsView.element);
     filmCardPreseter.init(film, comments);
-
   };
 
+  #removeShowMoreButtonElement = () => {
+    if (this.#showMoreBottonPresenter) {
+      this.#showMoreBottonPresenter.remove();
+    }
+  };
+
+  showMoreFilmCards = () => {
+    this.#removeShowMoreButtonElement();
+    this.#renderedFilmCount += FILM_COUNT_PER_STEP;
+    this.#films.slice(this.#renderedFilmCount - FILM_COUNT_PER_STEP, this.#renderedFilmCount).forEach((film) => {
+      this.#renderFilm(film);
+    });
+    this.#renderShowMoreButtonElement();
+  };
+
+  closeFilmDetailsView = () => {
+    if (document.querySelector('.film-details')) {
+      document.querySelector('.film-details').remove();
+    }
+  };
+
+  #renderShowMoreButtonElement = () => {
+    if (this.#renderedFilmCount < FILM_COUNT) {
+      if (!this.#showMoreBottonPresenter) {
+        this.#showMoreBottonPresenter = new ShowMoreButtonPresenter(this.#filmsListComponent.element);
+        this.#showMoreBottonPresenter.init();
+      }
+      this.#showMoreBottonPresenter.init();
+    }
+  };
 }

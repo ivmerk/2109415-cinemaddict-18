@@ -1,10 +1,8 @@
 import ShowMoreButtonView from '../view/show-more-botton-view.js';
 import { render } from '../framework/render.js';
-import { FILM_COUNT, FILM_COUNT_PER_STEP } from '../const.js';
-import FilmsListPresenter from './films-list-presenter.js';
+import { filmsListPresenter } from '../main.js';
 
 export default class ShowMoreButtonPresenter {
-  #renderedFilmCount = FILM_COUNT_PER_STEP;
   #showMoreFilmsButtonComponent = null;
   #showMoreFilmsButtonContainer = null;
 
@@ -19,15 +17,12 @@ export default class ShowMoreButtonPresenter {
   };
 
   #filmButtonMoreClickHandler = () => {
-    // this.#films.slice(this.#renderedFilmCount, this.#renderedFilmCount + FILM_COUNT_PER_STEP).forEach((film) => {
-    //   this.#renderFilm(film, this.#listCardsView.element);
-    // });
-    // this.#renderedFilmCount += FILM_COUNT_PER_STEP;
+    filmsListPresenter.showMoreFilmCards();
+  };
 
-    // if (this.#renderedFilmCount >= this.#films.length) {
-    //   this.#showMoreFilmsButtonComponent.element.remove();
-    //   this.#showMoreFilmsButtonComponent.removeElement();
 
-    // }
+  remove = () => {
+    this.#showMoreFilmsButtonComponent.element.remove();
+    this.#showMoreFilmsButtonComponent.removeElement();
   };
 }

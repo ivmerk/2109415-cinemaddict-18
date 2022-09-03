@@ -16,11 +16,17 @@ const SORTINGFILTERTYPES = {
 };
 const EMOTIONS = ['smile', 'sleeping', 'puke', 'angry'];
 
+const FILMCONTROLTYPES = {
+  isInWatchlist: 'watchlist',
+  isWatched: 'watched',
+  isFavorite: 'favorite',
+};
 
 export {
   SORTINGFILTERTYPES,
   NAVIGATIONFILTERTYPES,
   FILM_COUNT,
   FILM_COUNT_PER_STEP,
-  EMOTIONS
+  EMOTIONS,
+  FILMCONTROLTYPES
 };

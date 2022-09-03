@@ -21,6 +21,8 @@ export default class FilmDetailsPresenter {
       this.#removeFilmDetailsComponent();
       document.removeEventListener('keydown', this.#onEscKeyDown);
     });
+
+    this.#filmDetailsViewComponent.setButtonClickHandler(this.#filmButtonClickHandler);
     render(this.#filmDetailsViewComponent, this.#filmDetailsContainer);
   };
 
@@ -37,4 +39,10 @@ export default class FilmDetailsPresenter {
       document.removeEventListener('keydown', this.#onEscKeyDown);
     }
   };
+
+  #filmButtonClickHandler = (key, state) => {
+    this.#filmModel.filmInfo[key] = state;
+    // console.log(this.#filmModel.filmInfo[key]);
+  };
+
 }
