@@ -1,14 +1,15 @@
 import ShowMoreButtonView from '../view/show-more-botton-view.js';
 import { render } from '../framework/render.js';
-import { filmsListPresenter } from '../main.js';
 
 export default class ShowMoreButtonPresenter {
   #showMoreFilmsButtonComponent = null;
   #showMoreFilmsButtonContainer = null;
+  #showMoreFilmCards = null;
 
-  constructor(container) {
+  constructor(container, showMoreFilmCards) {
     this.#showMoreFilmsButtonContainer = container;
     this.#showMoreFilmsButtonComponent = new ShowMoreButtonView();
+    this.#showMoreFilmCards = showMoreFilmCards;
   }
 
   init = () => {
@@ -17,7 +18,7 @@ export default class ShowMoreButtonPresenter {
   };
 
   #filmButtonMoreClickHandler = () => {
-    filmsListPresenter.showMoreFilmCards();
+    this.#showMoreFilmCards();
   };
 
 

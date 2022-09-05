@@ -18,7 +18,7 @@ export default class FilmDetailsPresenter {
     const closeButtonDetailsElement = this.#filmDetailsViewComponent.element.querySelector('.film-details__close-btn');
     document.addEventListener('keydown', this.#onEscKeyDown);
     closeButtonDetailsElement.addEventListener('click', () => {
-      this.#removeFilmDetailsComponent();
+      this.removeFilmDetailsComponent();
       document.removeEventListener('keydown', this.#onEscKeyDown);
     });
 
@@ -26,7 +26,7 @@ export default class FilmDetailsPresenter {
     render(this.#filmDetailsViewComponent, this.#filmDetailsContainer);
   };
 
-  #removeFilmDetailsComponent = () => {
+  removeFilmDetailsComponent = () => {
     this.#filmDetailsViewComponent.element.remove();
     this.#filmDetailsViewComponent = null;
     document.body.classList.remove('hide-overflow');
@@ -35,7 +35,7 @@ export default class FilmDetailsPresenter {
   #onEscKeyDown = (evt) => {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
-      this.#removeFilmDetailsComponent();
+      this.removeFilmDetailsComponent();
       document.removeEventListener('keydown', this.#onEscKeyDown);
     }
   };

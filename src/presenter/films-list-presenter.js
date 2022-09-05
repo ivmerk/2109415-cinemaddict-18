@@ -14,6 +14,7 @@ export default class FilmsListPresenter {
   #films = [];
   #renderedFilmCount = 0;
   #showMoreBottonPresenter = null;
+  #filmCardPresenters = [];
 
   constructor(filmsListContainer, filmsModel, commentsModel) {
     this.#filmsListContainer = filmsListContainer;
@@ -27,14 +28,15 @@ export default class FilmsListPresenter {
     render(this.#filmsListComponent, this.#filmsListContainer);
     render(this.#listCardsView, this.#filmsListComponent.element);
 
-    this.showMoreFilmCards();
+    this.#showMoreFilmCards();
 
   };
 
   #renderFilm = (film) => {
     const comments = this.#commentsModel.get(film);
-    const filmCardPreseter = new FilmCardPresenter(this.#listCardsView.element);
-    filmCardPreseter.init(film, comments);
+    const filmCardPresenter = new FilmCardPresenter(this.#listCardsView.element, this.#closeFilmDetailsView);
+    filmCardPresenter.init(film, comments);
+    this.#filmCardPresenters.push(filmCardPresenter);
   };
 
   #removeShowMoreButtonElement = () => {
@@ -43,7 +45,7 @@ export default class FilmsListPresenter {
     }
   };
 
-  showMoreFilmCards = () => {
+  #showMoreFilmCards = () => {
     this.#removeShowMoreButtonElement();
     this.#renderedFilmCount += FILM_COUNT_PER_STEP;
     this.#films.slice(this.#renderedFilmCount - FILM_COUNT_PER_STEP, this.#renderedFilmCount).forEach((film) => {
@@ -52,17 +54,17 @@ export default class FilmsListPresenter {
     this.#renderShowMoreButtonElement();
   };
 
-  closeFilmDetailsView = () => {
-    if (document.querySelector('.film-details')) {
-      document.querySelector('.film-details').remove();
+  #closeFilmDetailsView = () => {
+    const previsionFilmDetailsView = this.#filmCardPresenters.find((presenter) => (presenter.isPopup === true));
+    if (previsionFilmDetailsView) {
+      previsionFilmDetailsView.removeFilmDetailsPresenter();
     }
   };
 
   #renderShowMoreButtonElement = () => {
     if (this.#renderedFilmCount < FILM_COUNT) {
       if (!this.#showMoreBottonPresenter) {
-        this.#showMoreBottonPresenter = new ShowMoreButtonPresenter(this.#filmsListComponent.element);
-        this.#showMoreBottonPresenter.init();
+        this.#showMoreBottonPresenter = new ShowMoreButtonPresenter(this.#filmsListComponent.element, this.#showMoreFilmCards);
       }
       this.#showMoreBottonPresenter.init();
     }

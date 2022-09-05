@@ -1,15 +1,19 @@
 import { render } from '../framework/render.js';
 import FilmCardView from '../view/film-card-view.js';
 import FilmDetailsPresenter from './film-details-presenter.js';
-import { filmsListPresenter } from '../main.js';
 
 export default class FilmCardPresenter {
   #filmCardViewComponent = null;
   #filmListContainer = null;
   #commentsModel = null;
   #film = null;
-  constructor(filmListContainer) {
+  #closeFilmDetailView = null;
+  isPopup = false;
+  #filmDetailsPresenter = null;
+
+  constructor(filmListContainer, closeFilmDetailsView) {
     this.#filmListContainer = filmListContainer;
+    this.#closeFilmDetailView = closeFilmDetailsView;
   }
 
   init = (film, comments) => {
@@ -23,15 +27,21 @@ export default class FilmCardPresenter {
 
 
   #filmCardClickHandler = (film, comments) => {
-    filmsListPresenter.closeFilmDetailsView();
+    this.#closeFilmDetailView();
     const siteBodyElement = document.querySelector('body');
-    const filmDetailsPresenter = new FilmDetailsPresenter(siteBodyElement);
-    filmDetailsPresenter.init(film, comments);
+    this.#filmDetailsPresenter = new FilmDetailsPresenter(siteBodyElement);
+    this.isPopup = true;
+    this.#filmDetailsPresenter.init(film, comments);
   };
 
   #filmButtonClickHandler = (key, state) => {
     this.#film.filmInfo[key] = state;
   };
 
+  removeFilmDetailsPresenter = () => {
+    if (this.#filmDetailsPresenter) {
+      this.#filmDetailsPresenter.removeFilmDetailsComponent();
+    }
+  };
 
 }
