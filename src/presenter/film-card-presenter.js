@@ -25,23 +25,23 @@ export default class FilmCardPresenter {
     render(this.#filmCardViewComponent, this.#filmListContainer);
   };
 
-
-  #filmCardClickHandler = (film, comments) => {
-    this.#closeFilmDetailView();
-    const siteBodyElement = document.querySelector('body');
-    this.#filmDetailsPresenter = new FilmDetailsPresenter(siteBodyElement);
-    this.isPopup = true;
-    this.#filmDetailsPresenter.init(film, comments);
-  };
-
   #filmButtonClickHandler = (key, state) => {
     this.#film.filmInfo[key] = state;
   };
 
   removeFilmDetailsPresenter = () => {
     if (this.#filmDetailsPresenter) {
+      this.isPopup = false;
       this.#filmDetailsPresenter.removeFilmDetailsComponent();
     }
+  };
+
+  #filmCardClickHandler = (film, comments) => {
+    this.#closeFilmDetailView();
+    const siteBodyElement = document.querySelector('body');
+    this.#filmDetailsPresenter = new FilmDetailsPresenter(siteBodyElement, this.removeFilmDetailsPresenter);
+    this.isPopup = true;
+    this.#filmDetailsPresenter.init(film, comments);
   };
 
 }

@@ -1,4 +1,4 @@
-import AbstractView from '../framework/view/abstract-view';
+import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 import dayjs from 'dayjs';
 import { createFilmDetailsCommentsTemplate } from './film-details-comments-template';
 import { formatStringToYear } from '../utils.js';
@@ -116,7 +116,7 @@ const createFilmDetailsTemplate = ({ filmInfo }, comments) =>
     `;
 
 
-export default class FilmDetailsView extends AbstractView {
+export default class FilmDetailsView extends AbstractStatefulView {
   #film = null;
   #comments = null;
 

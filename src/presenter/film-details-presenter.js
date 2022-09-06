@@ -6,9 +6,11 @@ export default class FilmDetailsPresenter {
   #filmDetailsContainer = null;
   #commentsModel = null;
   #filmModel = null;
+  #removeFilmDetailsPresenter = null;
 
-  constructor(filmDetailsContainer) {
+  constructor(filmDetailsContainer, removeFilmDetailsPresenter) {
     this.#filmDetailsContainer = filmDetailsContainer;
+    this.#removeFilmDetailsPresenter = removeFilmDetailsPresenter;
   }
 
   init = (film, comments) => {
@@ -17,8 +19,9 @@ export default class FilmDetailsPresenter {
     this.#filmDetailsViewComponent = new FilmDetailsView(this.#filmModel, this.#commentsModel);
     const closeButtonDetailsElement = this.#filmDetailsViewComponent.element.querySelector('.film-details__close-btn');
     document.addEventListener('keydown', this.#onEscKeyDown);
+    this.#filmDetailsContainer.classList.add('hide-overflow');
     closeButtonDetailsElement.addEventListener('click', () => {
-      this.removeFilmDetailsComponent();
+      this.#removeFilmDetailsPresenter();
       document.removeEventListener('keydown', this.#onEscKeyDown);
     });
 
@@ -29,13 +32,13 @@ export default class FilmDetailsPresenter {
   removeFilmDetailsComponent = () => {
     this.#filmDetailsViewComponent.element.remove();
     this.#filmDetailsViewComponent = null;
-    document.body.classList.remove('hide-overflow');
+    this.#filmDetailsContainer.classList.remove('hide-overflow');
   };
 
   #onEscKeyDown = (evt) => {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
-      this.removeFilmDetailsComponent();
+      this.#removeFilmDetailsPresenter();
       document.removeEventListener('keydown', this.#onEscKeyDown);
     }
   };
