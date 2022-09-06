@@ -1,5 +1,6 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import { formatMinutesToTime, formatStringToYear } from '../utils.js';
+import { FILMCONTROLTYPES } from '../const.js';
 
 
 const createFilmCardTemplate = ({ filmInfo }, comments) =>
@@ -14,12 +15,12 @@ const createFilmCardTemplate = ({ filmInfo }, comments) =>
       </p>
       <img src="./${filmInfo.poster}" alt="" class="film-card__poster">
       <p class="film-card__description">${filmInfo.description}</p>
-      <span class="film-card__comments">${comments} comments</span>
+      <span class="film-card__comments">${comments.length} comments</span>
     </a>
     <div class="film-card__controls">
-      <button class="film-card__controls-item film-card__controls-item--add-to-watchlist" type="button">Add to watchlist</button>
-      <button class="film-card__controls-item film-card__controls-item--mark-as-watched" type="button">Mark as watched</button>
-      <button class="film-card__controls-item film-card__controls-item--favorite" type="button">Mark as favorite</button>
+      <button class="film-card__controls-item film-card__controls-item--add-to-watchlist ${filmInfo.isInWatchlist ? 'film-card__controls-item--active' : ''}" type="button">Add to watchlist</button>
+      <button class="film-card__controls-item film-card__controls-item--mark-as-watched ${filmInfo.isWatched ? 'film-card__controls-item--active' : ''}" type="button">Mark as watched</button>
+      <button class="film-card__controls-item film-card__controls-item--favorite ${filmInfo.isFavorite ? 'film-card__controls-item--active' : ''}" type="button">Mark as favorite</button>
     </div>
   </article>`;
 
@@ -35,14 +36,38 @@ export default class FilmCardView extends AbstractView {
   }
 
   setCardClickHandler = (cb) => {
-
     this._callback.click = cb;
-    this.element.children[0].addEventListener('click', this.#clickHandler);
+    this.element.children[0].addEventListener('click', this.#cardClickHandler);
   };
 
-  #clickHandler = (evt) => {
+  #cardClickHandler = (evt) => {
     evt.preventDefault();
-    this._callback.click(this.#film);
+    this._callback.click(this.#film, this.#comments);
+  };
+
+  setButtonClickHandler = (cb) => {
+    this._callback.button = cb;
+    this.element.children[1].addEventListener('click', this.#buttonClickHandler);
+  };
+
+  #buttonClickHandler = (evt) => {
+    evt.preventDefault();
+    const targetElement = evt.srcElement;
+    if (!targetElement.classList.contains('film-card__controls-item--active')) {
+      targetElement.classList.add('film-card__controls-item--active');
+      for (const key in FILMCONTROLTYPES) {
+        if (targetElement.classList.value.includes(FILMCONTROLTYPES[key])) {
+          this._callback.button(key, true);
+        }
+      }
+    } else {
+      targetElement.classList.remove('film-card__controls-item--active');
+      for (const key in FILMCONTROLTYPES) {
+        if (targetElement.classList.value.includes(FILMCONTROLTYPES[key])) {
+          this._callback.button(key, false);
+        }
+      }
+    }
   };
 
   get template() {

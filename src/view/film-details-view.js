@@ -1,7 +1,8 @@
-import AbstractView from '../framework/view/abstract-view';
+import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 import dayjs from 'dayjs';
 import { createFilmDetailsCommentsTemplate } from './film-details-comments-template';
-import { formatStringToYear } from '../utils';
+import { formatStringToYear } from '../utils.js';
+import { FILMCONTROLTYPES } from '../const.js';
 
 const createFilmDetailsTemplate = ({ filmInfo }, comments) =>
   `<section class="film-details">
@@ -67,9 +68,9 @@ const createFilmDetailsTemplate = ({ filmInfo }, comments) =>
       </div >
 
   <section class="film-details__controls">
-    <button type="button" class="film-details__control-button film-details__control-button--watchlist" id="watchlist" name="watchlist">Add to watchlist</button>
-    <button type="button" class="film-details__control-button film-details__control-button--active film-details__control-button--watched" id="watched" name="watched">Already watched</button>
-    <button type="button" class="film-details__control-button film-details__control-button--favorite" id="favorite" name="favorite">Add to favorites</button>
+    <button type="button" class="film-details__control-button ${filmInfo.isInWatchlist ? 'film-details__control-button--active' : ''} film-details__control-button--watchlist" id="watchlist" name="watchlist">Add to watchlist</button>
+    <button type="button" class="film-details__control-button ${filmInfo.isWatched ? 'film-details__control-button--active' : ''}  film-details__control-button--watched" id="watched" name="watched">Already watched</button>
+    <button type="button" class="film-details__control-button ${filmInfo.isFavorite ? 'film-details__control-button--active' : ''} film-details__control-button--favorite" id="favorite" name="favorite">Add to favorites</button>
   </section>
     </div >
 
@@ -115,7 +116,7 @@ const createFilmDetailsTemplate = ({ filmInfo }, comments) =>
     `;
 
 
-export default class FilmDetailsView extends AbstractView {
+export default class FilmDetailsView extends AbstractStatefulView {
   #film = null;
   #comments = null;
 
@@ -124,6 +125,32 @@ export default class FilmDetailsView extends AbstractView {
     this.#film = film;
     this.#comments = comments;
   }
+
+  setButtonClickHandler = (cb) => {
+    this._callback.button = cb;
+    this.element.children[0].children[2].addEventListener('click', this.#buttonClickHandler);
+
+  };
+
+  #buttonClickHandler = (evt) => {
+    evt.preventDefault();
+    const targetElement = evt.srcElement;
+    if (!targetElement.classList.contains('film-details__control-button--active')) {
+      targetElement.classList.add('film-details__control-button--active');
+      for (const key in FILMCONTROLTYPES) {
+        if (targetElement.classList.value.includes(FILMCONTROLTYPES[key])) {
+          this._callback.button(key, true);
+        }
+      }
+    } else {
+      targetElement.classList.remove('film-details__control-button--active');
+      for (const key in FILMCONTROLTYPES) {
+        if (targetElement.classList.value.includes(FILMCONTROLTYPES[key])) {
+          this._callback.button(key, false);
+        }
+      }
+    }
+  };
 
   get template() {
     return createFilmDetailsTemplate(this.#film, this.#comments);

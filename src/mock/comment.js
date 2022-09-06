@@ -5,7 +5,7 @@ import dayjs from 'dayjs';
 
 const createComment = () => ({
   author: getRandomValue(WRITERS),
-  COMMENT,
+  comment: COMMENT,
   date: dayjs().subtract(getRandomInteger(DAYDURATION.MIN, DAYDURATION.MAX), 'day').toISOString(),
   emotion: getRandomValue(EMOTIONS),
 });

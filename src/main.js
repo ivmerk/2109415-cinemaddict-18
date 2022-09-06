@@ -22,3 +22,4 @@ render(new SortFilltersMenuView(navFilterList), siteMainElement);
 const filmsListPresenter = new FilmsListPresenter(siteMainElement, filmsModel, commentsModel);
 filmsListPresenter.init();
 
+export { filmsListPresenter };
