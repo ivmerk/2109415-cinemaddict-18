@@ -6,7 +6,7 @@ import { FILMCONTROLTYPES } from '../const.js';
 
 const createFilmDetailsTemplate = ({ filmInfo }, comments) =>
   `<section class="film-details">
-  <div class="film-details__inner"
+  <div class="film-details__inner">
     <div class="film-details__top-container">
       <div class="film-details__close">
         <button class="film-details__close-btn" type="button">close</button>
@@ -124,12 +124,34 @@ export default class FilmDetailsView extends AbstractStatefulView {
     super();
     this.#film = film;
     this.#comments = comments;
+    // this._state = FilmDetailsView.parseCommentsToState(comments);
   }
+
+  // parseCommentsToState = (comments) => comments;
 
   setButtonClickHandler = (cb) => {
     this._callback.button = cb;
-    this.element.children[0].children[2].addEventListener('click', this.#buttonClickHandler);
+    this.element.children[0].addEventListener('click', this.#buttonClickHandler);
 
+  };
+
+  setEmojiesClickHandler = (cb) => {
+    this._callback.click = cb;
+    this.element.querySelector('.film-details__emoji-list').addEventListener('click', this.#emojiesClickHandler);
+  };
+
+  _restoreHandlers = () => {
+
+  };
+
+  #emojiesClickHandler = (evt) => {
+    const bigEmojiContainer = this.element.querySelector('.film-details__add-emoji-label');
+    const clickedElement = evt.target.closest('img');
+    if (clickedElement) {
+      bigEmojiContainer.innerHTML = `<img src="images/emoji/${evt.target.parentNode.previousElementSibling.value}.png" width="55" height="55" alt="emoji-smile">`;
+      evt.target.parentNode.previousElementSibling.checked = true;
+      this._restoreHandlers();
+    }
   };
 
   #buttonClickHandler = (evt) => {

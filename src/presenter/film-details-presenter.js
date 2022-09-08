@@ -7,6 +7,7 @@ export default class FilmDetailsPresenter {
   #commentsModel = null;
   #filmModel = null;
   #removeFilmDetailsPresenter = null;
+  #closeButtonDetailsElement = null;
 
   constructor(filmDetailsContainer, removeFilmDetailsPresenter) {
     this.#filmDetailsContainer = filmDetailsContainer;
@@ -17,16 +18,22 @@ export default class FilmDetailsPresenter {
     this.#commentsModel = comments;
     this.#filmModel = film;
     this.#filmDetailsViewComponent = new FilmDetailsView(this.#filmModel, this.#commentsModel);
-    const closeButtonDetailsElement = this.#filmDetailsViewComponent.element.querySelector('.film-details__close-btn');
+    this.#setHandlers();
+    render(this.#filmDetailsViewComponent, this.#filmDetailsContainer);
+  };
+
+  #setHandlers = () => {
     document.addEventListener('keydown', this.#onEscKeyDown);
+    this.#closeButtonDetailsElement = this.#filmDetailsViewComponent.element.querySelector('.film-details__close-btn');
     this.#filmDetailsContainer.classList.add('hide-overflow');
-    closeButtonDetailsElement.addEventListener('click', () => {
+    this.#closeButtonDetailsElement.addEventListener('click', () => {
       this.#removeFilmDetailsPresenter();
       document.removeEventListener('keydown', this.#onEscKeyDown);
     });
 
     this.#filmDetailsViewComponent.setButtonClickHandler(this.#filmButtonClickHandler);
-    render(this.#filmDetailsViewComponent, this.#filmDetailsContainer);
+    this.#filmDetailsViewComponent.setEmojiesClickHandler();
+
   };
 
   removeFilmDetailsComponent = () => {
