@@ -1,4 +1,4 @@
-import { getRandomInteger, getRandomValue } from '../utils.js';
+import { getRandomInteger, getRandomValue } from '../utils/utils.js';
 import { COMMENT, DAYDURATION, EMOTIONS, WRITERS } from './const.js';
 import dayjs from 'dayjs';
 

@@ -1,47 +1,95 @@
-import { render } from '../framework/render.js';
+import { render, replace, remove } from '../framework/render.js';
 import FilmCardView from '../view/film-card-view.js';
-import FilmDetailsPresenter from './film-details-presenter.js';
+import { UserAction, UpdateType } from '../const';
 
 export default class FilmCardPresenter {
   #filmCardViewComponent = null;
-  #filmListContainer = null;
+  #container = null;
   #commentsModel = null;
   #film = null;
-  #closeFilmDetailView = null;
+  #clickCardHandler = null;
+  #escKeyDownHandler = null;
   isPopup = false;
   #filmDetailsPresenter = null;
+  #changeData = null;
+  id = null;
 
-  constructor(filmListContainer, closeFilmDetailsView) {
-    this.#filmListContainer = filmListContainer;
-    this.#closeFilmDetailView = closeFilmDetailsView;
+  constructor(container, changeData, clickCardHandler, escKeyDownHandler) {
+    this.#container = container;
+    this.#changeData = changeData;
+    this.#clickCardHandler = clickCardHandler;
+    this.#escKeyDownHandler = escKeyDownHandler;
   }
 
   init = (film, comments) => {
     this.#commentsModel = comments;
     this.#film = film;
+
+    const prevFilmCardComponent = this.#filmCardViewComponent;
+
     this.#filmCardViewComponent = new FilmCardView(film, this.#commentsModel);
-    this.#filmCardViewComponent.setCardClickHandler(this.#filmCardClickHandler);
-    this.#filmCardViewComponent.setButtonClickHandler(this.#filmButtonClickHandler);
-    render(this.#filmCardViewComponent, this.#filmListContainer);
-  };
+    this.id = this.#film.id;
+    this.#setHandles();
 
-  #filmButtonClickHandler = (key, state) => {
-    this.#film.filmInfo[key] = state;
-  };
-
-  removeFilmDetailsPresenter = () => {
+    if (prevFilmCardComponent === null) {
+      render(this.#filmCardViewComponent, this.#container);
+    } else {
+      replace(this.#filmCardViewComponent, prevFilmCardComponent);
+    }
     if (this.#filmDetailsPresenter) {
-      this.isPopup = false;
-      this.#filmDetailsPresenter.removeFilmDetailsComponent();
+      this.#filmDetailsPresenter.init({ film, comments });
     }
   };
 
-  #filmCardClickHandler = (film, comments) => {
-    this.#closeFilmDetailView();
-    const siteBodyElement = document.querySelector('body');
-    this.#filmDetailsPresenter = new FilmDetailsPresenter(siteBodyElement, this.removeFilmDetailsPresenter);
-    this.isPopup = true;
-    this.#filmDetailsPresenter.init(film, comments);
+  #setHandles = () => {
+    this.#filmCardViewComponent.setCardClickHandler(() => {
+      this.#clickCardHandler(this.#film);
+      document.addEventListener('keydown', this.#escKeyDownHandler);
+    });
+    this.#filmCardViewComponent.setWatchlistBtnClickHandler(this.#watchlistBtnClickHandler);
+    this.#filmCardViewComponent.setWatchedBtnClickHandler(this.#watchedBtnClickHandler);
+    this.#filmCardViewComponent.setFavoriteBtnClickHandler(this.#favoriteBtnClickHandler);
   };
 
+  #watchlistBtnClickHandler = () => {
+    this.#changeData(
+      UserAction.UPDATE_FILM,
+      UpdateType.PATCH,
+      {
+        ...this.#film, userDetails: {
+          ...this.#film.userDetails, watchlist: !this.#film.userDetails.watchlist
+        },
+      }
+    );
+  };
+
+  #watchedBtnClickHandler = () => {
+    this.#changeData(
+      UserAction.UPDATE_FILM,
+      UpdateType.PATCH,
+      {
+        ...this.#film, userDetails: {
+          ...this.#film.userDetails, watched: !this.#film.userDetails.watched
+        },
+      }
+    );
+  };
+
+  #favoriteBtnClickHandler = () => {
+    this.#changeData(
+      UserAction.UPDATE_FILM,
+      UpdateType.PATCH,
+      {
+        ...this.#film, userDetails: {
+          ...this.#film.userDetails, favorite: !this.#film.userDetails.favorite
+        },
+      }
+    );
+  };
+
+  destroy = () => {
+    remove(this.#filmCardViewComponent);
+  };
+
+  #clear = () => { };
 }
