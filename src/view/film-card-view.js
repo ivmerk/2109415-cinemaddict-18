@@ -1,8 +1,6 @@
 import { formatMinutesToTime, formatStringToYear } from '../utils/utils.js';
-import { FilmControlType } from '../const.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
-//<button class="film-card__controls-item film-card__controls-item--add-to-watchlist ${film.userDetails.watchlist ? 'film-card__controls-item--active' : ''}" type="button">Add to watchlist</button>
-//
+
 const createFilmCardControlItemsTemplate = (userDetails) => `
 <div class="film-card__controls">
       <button class="film-card__controls-item film-card__controls-item--add-to-watchlist ${userDetails.watchlist ? 'film-card__controls-item--active' : ''}" type="button">Add to watchlist</button>

@@ -2,7 +2,6 @@ import FilmDetailsView from '../view/film-details-view';
 import { render } from '../framework/render.js';
 import { UserAction, UpdateType } from '../const';
 import dayjs from 'dayjs';
-import { formatMinutesToTime } from '../utils/utils';
 
 export default class FilmDetailsPresenter {
   #filmDetailsViewComponent = null;
@@ -129,7 +128,6 @@ export default class FilmDetailsPresenter {
   };
 
   #commentAddClickHandler = () => {
-    debugger;
     const newCommentId = (1 + this.#totalCommentsAmount).toString();
     const newComment = {
       id: newCommentId,
