@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { getRandomInteger, getRandomValue, getRandomFloat } from '../utils.js';
+import { getRandomInteger, getRandomValue, getRandomFloat } from '../utils/utils.js';
 import { MAX_COMMENTS_ON_FILM, GENRECOUNT, RATING, AGERATING, RUNTIME, DESCRIPTION, TITLES, POSTERS, COUNTRIES, DIRECTORS, WRITERS, ACTORS, NAME_COUNT, YEARDURATION, GENRES } from './const.js';
 import { FILM_COUNT } from '../const.js';
 
@@ -19,9 +19,7 @@ const generateMovieCard = () => ({
   runtime: getRandomInteger(RUNTIME.MIN, RUNTIME.MAX),
   genre: Array.from({ length: getRandomInteger(GENRECOUNT.MIN, GENRECOUNT.MAX) }, () => getRandomValue(GENRES)),
   description: DESCRIPTION,
-  isInWatchlist: false,
-  isWatched: false,
-  isFavorite: false,
+
 
 });
 
@@ -39,6 +37,11 @@ export const generateMovieList = () => {
       id: String(index + 1),
       comments: (hasComments) ? Array.from({ length: totalCommentCount }, (_value, commentIndex) => String(totalCommentCount - commentIndex)) : [],
       filmInfo: film,
+      userDetails: {
+        watchlist: true,
+        watched: false,
+        favorite: false,
+      }
     };
   });
 };

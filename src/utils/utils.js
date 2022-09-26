@@ -28,5 +28,21 @@ const formatStringToYear = (date) => dayjs(date).format('YYYY');
 const formatMinutesToTime = (date) => dayjs(date).format('H[h] mm[m]');
 // const formatMinutesToTime = (minutes) => dayjs.duration(minutes, 'minutes').format('H[h] mm[m]');
 
+const sortByDate = (filmA, filmB) => {
+  if (filmA.filmInfo.release.date < filmB.filmInfo.release.date) {
+    return 1;
+  } else {
+    return -1;
+  }
+};
 
-export { getRandomInteger, getRandomValue, getRandomFloat, formatStringToDateWithTime, formatStringToDate, formatStringToYear, formatMinutesToTime };
+const sortByRate = (filmA, filmB) => {
+  if (filmA.filmInfo.totalRating < filmB.filmInfo.totalRating) {
+    return 1;
+  } else {
+    return -1;
+  }
+};
+
+
+export { sortByDate, sortByRate, getRandomInteger, getRandomValue, getRandomFloat, formatStringToDateWithTime, formatStringToDate, formatStringToYear, formatMinutesToTime };
