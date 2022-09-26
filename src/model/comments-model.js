@@ -5,12 +5,15 @@ export default class CommentsModel extends Observable {
   #filmsModel = null;
   #allComments = [];
   #comments = [];
+  #apiService = null;
 
-  constructor(filmsModel) {
+  constructor(filmsModel) { //(apiService)
     super();
     this.#filmsModel = filmsModel;
     this.#generateAllComments();
+    // this.#apiService = apiService;
   }
+
 
   #generateAllComments() {
     this.#allComments = generateCommenst(this.#filmsModel.films);
