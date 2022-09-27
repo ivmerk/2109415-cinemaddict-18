@@ -30,17 +30,22 @@ const createFilmDetailsTemplate = ({ filmInfo, comments, userDetails, checkedEmo
 
 export default class FilmDetailsView extends AbstractStatefulView {
 
-  constructor(film, comments, viewData, updateViewData) {
+  constructor(film, comments, viewData, updateViewData, isCommentLoadingError) {
     super();
     this._state = FilmDetailsView.parseFilmToState(
       film,
       comments,
       viewData.emotion,
       viewData.comment,
-      viewData.scrollPosition
+      viewData.scrollPosition,
+      isCommentLoadingError
     );
+
     this.updateViewData = updateViewData;
-    this.#setInnerHandlers();
+
+    if (!isCommentLoadingError) {
+      this.#setInnerHandlers();
+    }
   }
 
   get template() {
@@ -49,12 +54,15 @@ export default class FilmDetailsView extends AbstractStatefulView {
 
   _restoreHandlers = () => {
     this.setScrollPosition();
-    this.#setInnerHandlers();
     this.setCloseBtnClickHandler(this._callback.closeBtnClick);
     this.setWatchlistBtnClickHandler(this._callback.watchlistBtnClick);
     this.setWatchedBtnClickHandler(this._callback.watchedBtnClick);
     this.setFavoriteBtnClickHandler(this._callback.favoriteBtnClick);
-    this.setCommentDeleteClickHandler(this._callback.commentDeleteClick);
+
+    if (!this._state.isCommentLoadingError) {
+      this.#setInnerHandlers();
+      this.setCommentDeleteClickHandler(this._callback.commentDeleteClick);
+    }
   };
 
   setScrollPosition = () => {

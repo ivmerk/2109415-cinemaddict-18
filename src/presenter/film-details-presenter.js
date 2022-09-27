@@ -25,22 +25,28 @@ export default class FilmDetailsPresenter {
     this.#changeData = handleViewAction;
   }
 
-  init = (film, comments, totalCommentsAmount) => {
+  init = (film, comments, isCommentLoadingError) => {
 
-    this.#comments = comments;
     this.#film = film;
-    this.#totalCommentsAmount = totalCommentsAmount;
+
+    this.#comments = (!isCommentLoadingError)
+      ? comments
+      : [];
+
+
     const prevFilmDetailsViewComponent = this.#filmDetailsViewComponent;
 
     this.#filmDetailsViewComponent = new FilmDetailsView(
       this.#film,
       this.#comments,
       this.#viewData,
-      this.#updateViewData
+      this.#updateViewData,
+      isCommentLoadingError
     );
 
-    this.#setHandlers();
-
+    if (!isCommentLoadingError) {
+      this.#setHandlers();
+    }
     if (prevFilmDetailsViewComponent === null) {
       render(this.#filmDetailsViewComponent, this.#container);
     }

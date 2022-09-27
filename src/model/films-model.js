@@ -1,9 +1,10 @@
 import { UpdateType } from '../const.js';
 import Observable from '../framework/observable.js';
-import { generateMovieList } from '../mock/movie-card.js';
+// import { generateMovieList } from '../mock/movie-card.js';
 
 export default class FilmsModel extends Observable {
-  #films = generateMovieList();
+  // #films = generateMovieList();
+  #films = [];
   #apiService = null;
 
   constructor(apiService) {
@@ -16,7 +17,7 @@ export default class FilmsModel extends Observable {
       const films = await this.#apiService.get();
       this.#films = films.map(this.#adaptToClient);
     } catch {
-      this.#films = generateMovieList();
+      this.#films = [];
     }
     this._notify(UpdateType.INIT);
   };
@@ -51,7 +52,7 @@ export default class FilmsModel extends Observable {
       },
       userDetails: {
         ...film['user_details'],
-        alreadyWatched: film['user_details']['already_watched'],
+        watched: film['user_details']['already_watched'],
         watchingDate: film['user_details']['watching_date']
       }
     };

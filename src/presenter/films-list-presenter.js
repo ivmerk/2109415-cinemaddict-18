@@ -9,25 +9,28 @@ import { filter } from '../utils/filter.js';
 import FilmDetailsPresenter from './film-details-presenter.js';
 import NoFilmsView from '../view/nofilms-view.js';
 import SortFilltersMenuView from '../view/sort-fillters-menu-view.js';
+import FilmListLoadingView from '../view/film-list-loading-view.js';
 
 export default class FilmsListPresenter {
   #sortComponent = null;
   #listCardsView = new ListCardsView();
   #filmsListComponent = new FilmsListView();
+  #loadingComponent = new FilmListLoadingView;
   #noFilmComponent = null;
   #container = null;
   #filmsModel = null;
   #commentsModel = null;
   #filterModel = null;
+  #isCommentLoadingError = null;
 
-  #renderedFilmCount = 0; //FILM_COUNT_PER_STEP;
+  #renderedFilmCount = 0;
   #showMoreBottonPresenter = null;
   #selectedFilm = null;
   #currentSortType = SortingFiltersType.DEFAULT;
   #filterType = FilterType.ALL;
   #filmCardPresenters = new Map();
   #filmDetailsPresenter = null;
-
+  #isLoading = true;
 
   constructor(filmsListContainer, filmsModel, commentsModel, filterModel) {
     this.#container = filmsListContainer;
@@ -99,6 +102,11 @@ export default class FilmsListPresenter {
         this.#clearFilmList({ resetRenderedFilmCount: true, resertSortType: true });
         this.#renderBoard();
         break;
+      case UpdateType.INIT:
+        this.#isLoading = false;
+        remove(this.#loadingComponent);
+        this.#renderBoard();
+        break;
     }
   };
 
@@ -134,6 +142,9 @@ export default class FilmsListPresenter {
   };
 
   #renderFilmDetails() {
+
+    // console.log(this.#commentsModel.get(this.#selectedFilm));
+    // console.log(this.#selectedFilm);
     const comments = [...this.#commentsModel.get(this.#selectedFilm)];
     if (!this.#filmDetailsPresenter) {
       this.#filmDetailsPresenter = new FilmDetailsPresenter(
@@ -147,6 +158,10 @@ export default class FilmsListPresenter {
     }
     this.#filmDetailsPresenter.init(this.#selectedFilm, comments, this.#commentsModel.length);
   }
+
+  #renderLoading = () => {
+    render(this.#loadingComponent, this.#container, RenderPosition.AFTERBEGIN);
+  };
 
   #renderNoFilms() {
     this.#noFilmComponent = new NoFilmsView(this.#filterType);
@@ -183,6 +198,7 @@ export default class FilmsListPresenter {
 
     remove(this.#sortComponent);
     this.#removeShowMoreButtonElement();
+    remove(this.#loadingComponent);
 
     if (this.#noFilmComponent) {
       remove(this.#noFilmComponent);
@@ -229,6 +245,13 @@ export default class FilmsListPresenter {
   };
 
   #renderBoard = () => {
+
+    render(this.#filmsListComponent, this.#container);
+
+    if (this.#isLoading) {
+      this.#renderLoading();
+    }
+
     const filmsCount = this.films.length;
 
     if (filmsCount === 0) {
@@ -239,7 +262,6 @@ export default class FilmsListPresenter {
     // debugger;
     const renderedCards = this.films.slice(0, Math.min(this.#renderedFilmCount, filmsCount));
     this.#renderFilms(renderedCards);
-    render(this.#filmsListComponent, this.#container);
     render(this.#listCardsView, this.#filmsListComponent.element);
 
     if (filmsCount > this.#renderedFilmCount) {
