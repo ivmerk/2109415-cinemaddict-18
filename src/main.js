@@ -10,7 +10,7 @@ import FilmsApiService from './api-services/films-api-service.js';
 // import CommentsApiService from './api-services/comments-api-service.js';
 
 const AUTHORIZATION = 'Basic $er883jdzbdw';
-const END_POINT = 'https://18.ecmascript.pages.academy/cinemaddict/';
+const END_POINT = 'https://18.ecmascript.pages.academy/cinemaddict';
 
 const siteMainElement = document.querySelector('.main');
 const siteHeaderElement = document.querySelector('.header');
@@ -27,5 +27,5 @@ const filterPresenter = new FilterPresenter(siteMainElement, filterModel, filmsM
 
 render(new ProfileRatingView(), siteHeaderElement);
 filterPresenter.init();
-
+filmsModel.init();
 filmsListPresenter.init();

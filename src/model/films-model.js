@@ -63,7 +63,7 @@ export default class FilmsModel extends Observable {
     delete adaptedFilm.filmInfo['age_rating'];
     delete adaptedFilm.userDetails['already_watched'];
     delete adaptedFilm.userDetails['watching_date'];
-    // console.log(adaptedFilm);
+    console.log(adaptedFilm);
     return adaptedFilm;
   }
 }
