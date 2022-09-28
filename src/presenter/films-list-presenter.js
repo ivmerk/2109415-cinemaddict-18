@@ -21,7 +21,7 @@ export default class FilmsListPresenter {
   #filmsModel = null;
   #commentsModel = null;
   #filterModel = null;
-  #isCommentLoadingError = null;
+  #isCommentLoadingError = false;
 
   #renderedFilmCount = 0;
   #showMoreBottonPresenter = null;
@@ -141,11 +141,13 @@ export default class FilmsListPresenter {
     this.#filmCardPresenters.set(film.id, filmCardPresenter);
   };
 
-  #renderFilmDetails() {
-
-    // console.log(this.#commentsModel.get(this.#selectedFilm));
-    // console.log(this.#selectedFilm);
-    const comments = [...this.#commentsModel.get(this.#selectedFilm)];
+  #renderFilmDetails = async () => {
+    let comments = null;
+    try {
+      comments = await this.#commentsModel.get(this.#selectedFilm);
+    } catch (err) {
+      this.#isCommentLoadingError = true;
+    }
     if (!this.#filmDetailsPresenter) {
       this.#filmDetailsPresenter = new FilmDetailsPresenter(
         this.#container.parentNode,
@@ -156,8 +158,8 @@ export default class FilmsListPresenter {
     } else {
       this.#filmDetailsPresenter.destroy();
     }
-    this.#filmDetailsPresenter.init(this.#selectedFilm, comments, this.#commentsModel.length);
-  }
+    this.#filmDetailsPresenter.init(this.#selectedFilm, comments, this.#isCommentLoadingError);
+  };
 
   #renderLoading = () => {
     render(this.#loadingComponent, this.#container, RenderPosition.AFTERBEGIN);
