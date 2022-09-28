@@ -6,7 +6,7 @@ export default class FilmsApiService extends ApiService {
   update = async (film) => {
     const response = await this._load({
       url: `movies/${film.id}`,
-      method: Method.PUT,
+      // method: Method.PUT,
       body: JSON.stringify(this.#adaptToServer(film)),
       headers: new Headers({ 'Content-Type': 'application/json' })
     });
