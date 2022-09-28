@@ -1,7 +1,7 @@
 import FilmsListView from '../view/films-list-view.js';
 import ListCardsView from '../view/list-cards-view.js';
 import { remove, render, RenderPosition } from '../framework/render.js';
-import { FILM_COUNT_PER_STEP, FilterType, SortingFiltersType, UpdateType, UserAction } from '../const.js';
+import { FilterType, SortingFiltersType, UpdateType, UserAction } from '../const.js';
 import FilmCardPresenter from './film-card-presenter.js';
 import ShowMoreButtonPresenter from './show-more-botton-presenter.js';
 import { sortByDate, sortByRate } from '../utils/utils.js';
@@ -10,6 +10,9 @@ import FilmDetailsPresenter from './film-details-presenter.js';
 import NoFilmsView from '../view/nofilms-view.js';
 import SortFilltersMenuView from '../view/sort-fillters-menu-view.js';
 import FilmListLoadingView from '../view/film-list-loading-view.js';
+
+
+const FILM_COUNT_PER_STEP = 5;
 
 export default class FilmsListPresenter {
   #sortComponent = null;
@@ -23,7 +26,7 @@ export default class FilmsListPresenter {
   #filterModel = null;
   #isCommentLoadingError = false;
 
-  #renderedFilmCount = 0;
+  #renderedFilmCount = FILM_COUNT_PER_STEP;
   #showMoreBottonPresenter = null;
   #selectedFilm = null;
   #currentSortType = SortingFiltersType.DEFAULT;
@@ -57,9 +60,12 @@ export default class FilmsListPresenter {
 
 
   init = () => {
-
+    // debugger;
     this.#renderBoard();
     this.#showMoreFilmCards();
+    if (!this.#renderedFilmCount) {
+      this.#renderedFilmCount = FILM_COUNT_PER_STEP;
+    }
   };
 
   #handleViewAction = (actionType, updateType, updateFilm, updateComment) => {
@@ -252,6 +258,7 @@ export default class FilmsListPresenter {
 
     if (this.#isLoading) {
       this.#renderLoading();
+      return;
     }
 
     const filmsCount = this.films.length;
@@ -261,7 +268,6 @@ export default class FilmsListPresenter {
       return;
     }
     this.#renderSort();
-    // debugger;
     const renderedCards = this.films.slice(0, Math.min(this.#renderedFilmCount, filmsCount));
     this.#renderFilms(renderedCards);
     render(this.#listCardsView, this.#filmsListComponent.element);
