@@ -1,4 +1,5 @@
 import ApiService from '../framework/api-service.js';
+import { Method } from '../const.js';
 
 export default class FilmsApiService extends ApiService {
   get = () => this._load({ url: 'movies' }).then(ApiService.parseResponse);
@@ -6,7 +7,7 @@ export default class FilmsApiService extends ApiService {
   update = async (film) => {
     const response = await this._load({
       url: `movies/${film.id}`,
-      // method: Method.PUT,
+      method: Method.PUT,
       body: JSON.stringify(this.#adaptToServer(film)),
       headers: new Headers({ 'Content-Type': 'application/json' })
     });
@@ -27,7 +28,7 @@ export default class FilmsApiService extends ApiService {
       },
       ['user_details']: {
         ...film.userDetails,
-        ['already_watched']: film.userDetails.alreadyWatched,
+        ['already_watched']: film.userDetails.watched,
         ['watching_date']: film.userDetails.watchingDate
       }
     };
@@ -36,7 +37,7 @@ export default class FilmsApiService extends ApiService {
     delete adaptedFilm['film_info'].alternativeTitle;
     delete adaptedFilm['film_info'].totalRating;
     delete adaptedFilm['film_info'].ageRating;
-    delete adaptedFilm['user_details'].alreadyWatched;
+    delete adaptedFilm['user_details'].watched;
     delete adaptedFilm['user_details'].watchingDate;
 
     return adaptedFilm;

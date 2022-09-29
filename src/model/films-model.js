@@ -1,6 +1,5 @@
 import { UpdateType } from '../const.js';
 import Observable from '../framework/observable.js';
-// import { generateMovieList } from '../mock/movie-card.js';
 
 export default class FilmsModel extends Observable {
   #films = [];
@@ -32,14 +31,8 @@ export default class FilmsModel extends Observable {
       throw new Error('Can\'t update unexisting file');
     }
 
-    // this.#films = [
-    //   ...this.#films.slice(0, index),
-    //   update,
-    //   ...this.#films.slice(index + 1),
-    // ];
-    // this._notify(updateType, update);
     try {
-      const response = await this.#apiService.updateTask(update);
+      const response = await this.#apiService.update(update);
       const updatedTask = this.#adaptToClient(response);
       this.#films = [
         ...this.#films.slice(0, index),
@@ -75,7 +68,6 @@ export default class FilmsModel extends Observable {
     delete adaptedFilm.filmInfo['age_rating'];
     delete adaptedFilm.userDetails['already_watched'];
     delete adaptedFilm.userDetails['watching_date'];
-    // console.log(adaptedFilm);
     return adaptedFilm;
   }
 }

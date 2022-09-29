@@ -62,7 +62,6 @@ export default class FilmsListPresenter {
   init = () => {
     // debugger;
     this.#renderBoard();
-    this.#showMoreFilmCards();
     if (!this.#renderedFilmCount) {
       this.#renderedFilmCount = FILM_COUNT_PER_STEP;
     }
@@ -74,12 +73,12 @@ export default class FilmsListPresenter {
         this.#filmsModel.update(updateType, updateFilm);
         break;
       case UserAction.ADD_COMMENT:
-        this.#commentsModel.add(updateType, updateComment);
+        this.#commentsModel.add(updateType, updateComment, updateFilm);
         this.#filmDetailsPresenter.clearViewData();
         this.#filmsModel.update(updateType, updateFilm);
         break;
       case UserAction.DELETE_COMMENT:
-        this.#commentsModel.delete(updateType, updateComment);
+        this.#commentsModel.delete(updateType, updateComment, updateFilm);
         this.#filmsModel.update(updateType, updateFilm);
         break;
     }
@@ -137,13 +136,13 @@ export default class FilmsListPresenter {
   };
 
   #renderFilm = (film) => {
-    const comments = this.#commentsModel.get(film);
+    // console.log(film);
     const filmCardPresenter = new FilmCardPresenter(
       this.#listCardsView.element,
       this.#handleViewAction,
       this.#addFilmDetailsComponent,
       this.#onKeyDown);
-    filmCardPresenter.init(film, comments);
+    filmCardPresenter.init(film);
     this.#filmCardPresenters.set(film.id, filmCardPresenter);
   };
 
@@ -234,6 +233,7 @@ export default class FilmsListPresenter {
   };
 
   #showMoreFilmCards = () => {
+    // debugger
     this.#removeShowMoreButtonElement();
     const filmsCount = this.films.length;
     const newRenderedFilmCount = Math.min(filmsCount, this.#renderedFilmCount + FILM_COUNT_PER_STEP);

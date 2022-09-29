@@ -1,11 +1,10 @@
 import Observable from '../framework/observable.js';
-// import { generateCommenst } from '../mock/comment.js';
 
 export default class CommentsModel extends Observable {
   #comments = [];
   #apiService = null;
 
-  constructor(apiService) { //(apiService)
+  constructor(apiService) {
     super();
     this.#apiService = apiService;
   }
@@ -19,13 +18,18 @@ export default class CommentsModel extends Observable {
     return this.#comments.length;
   }
 
-  add = (updateType, update) => {
-    // this.#allComments.push(update);
-    this.#comments.push(update);
-    this._notify(updateType, update);
+  add = async (updateType, update, film) => {
+    try {
+      const response = await this.#apiService.add(update, film);
+      const newComment = this.#adaptToClient(response);
+      this.#comments.push(newComment);
+      this._notify(updateType, newComment);
+    } catch (err) {
+      throw new Error('Can\'t add comment');
+    }
   };
 
-  delete = (updateType, update) => {
+  delete = async (updateType, update, film) => {
     const index = this.#comments.findIndex(
       (comment) => comment.id === update.id
     );
@@ -34,11 +38,20 @@ export default class CommentsModel extends Observable {
       throw new Error('Can\'t delete unexisting comment');
     }
 
-    this.#comments = [
-      ...this.#comments.slice(0, index),
-      ...this.#comments.slice(index + 1),
-    ];
+    try {
+      await this.#apiService.delete(update, film);
+      this.#comments = [
+        ...this.#comments.slice(0, index),
+        ...this.#comments.slice(index + 1),
+      ];
+      this._notify(updateType);
+    } catch (err) {
+      throw new Error('Can\'t delete comment');
+    }
+  };
 
-    this._notify(updateType);
+  #adaptToClient = (comment) => {
+    const adaptedComment = comment;
+    return adaptedComment;
   };
 }

@@ -5,7 +5,6 @@ import { UserAction, UpdateType } from '../const';
 export default class FilmCardPresenter {
   #filmCardViewComponent = null;
   #container = null;
-  #commentsModel = null;
   #film = null;
   #clickCardHandler = null;
   #escKeyDownHandler = null;
@@ -21,13 +20,12 @@ export default class FilmCardPresenter {
     this.#escKeyDownHandler = escKeyDownHandler;
   }
 
-  init = (film, comments) => {
-    this.#commentsModel = comments;
+  init = (film) => {
     this.#film = film;
 
     const prevFilmCardComponent = this.#filmCardViewComponent;
 
-    this.#filmCardViewComponent = new FilmCardView(film, this.#commentsModel);
+    this.#filmCardViewComponent = new FilmCardView(film);
     this.id = this.#film.id;
     this.#setHandles();
 
@@ -36,9 +34,9 @@ export default class FilmCardPresenter {
     } else {
       replace(this.#filmCardViewComponent, prevFilmCardComponent);
     }
-    if (this.#filmDetailsPresenter) {
-      this.#filmDetailsPresenter.init({ film, comments });
-    }
+    // if (this.#filmDetailsPresenter) {
+    //   this.#filmDetailsPresenter.init({ film, this.#film.comments });
+    // }
   };
 
   #setHandles = () => {
