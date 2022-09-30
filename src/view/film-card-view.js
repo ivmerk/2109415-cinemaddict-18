@@ -30,8 +30,6 @@ const createFilmCardTemplate = ({ filmInfo, comments, userDetails }) =>
 
 export default class FilmCardView extends AbstractStatefulView {
 
-  #film = null;
-  #comments = null;
 
   constructor(film) {
     super();
@@ -95,10 +93,8 @@ export default class FilmCardView extends AbstractStatefulView {
 
   static parseFilmToState = (
     film,
-    // comments,
   ) => ({
     ...film,
-    // comments,
   });
 
 }

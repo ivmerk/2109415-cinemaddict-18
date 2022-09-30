@@ -2,6 +2,13 @@ const FILM_COUNT = 15;
 
 const FILM_COUNT_PER_STEP = 5;
 
+const Method = {
+  GET: 'GET',
+  PUT: 'PUT',
+  POST: 'POST',
+  DELETE: 'DELETE',
+};
+
 const FilterType = {
   ALL: 'all',
   WATCHLIST: 'watchlist',
@@ -38,9 +45,11 @@ const UpdateType = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
+  INIT: 'INIT',
 };
 
 export {
+  Method,
   SortingFiltersType,
   FilterType,
   FILM_COUNT,
