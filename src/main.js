@@ -25,7 +25,6 @@ const headerProfilePresenter = new HeaderProfilePresenter(siteHeaderElement, fil
 const filmsListPresenter = new FilmsListPresenter(siteMainElement, filmsModel, commentsModel, filterModel);
 const filterPresenter = new FilterPresenter(siteMainElement, filterModel, filmsModel);
 
-
 headerProfilePresenter.init();
 filterPresenter.init();
 filmsListPresenter.init();
