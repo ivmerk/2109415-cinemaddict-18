@@ -76,6 +76,9 @@ export default class FilmsListPresenter {
         }
         break;
       case UserAction.ADD_COMMENT:
+        if (!updateComment.emotion) {
+          updateComment.emotion = 'smile';
+        }
         try {
           await this.#commentsModel.add(updateType, updateComment, updateFilm);
           await this.#filmsModel.update(updateType, updateFilm);
