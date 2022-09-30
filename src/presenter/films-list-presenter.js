@@ -60,26 +60,37 @@ export default class FilmsListPresenter {
 
 
   init = () => {
-    // debugger;
     this.#renderBoard();
     if (!this.#renderedFilmCount) {
       this.#renderedFilmCount = FILM_COUNT_PER_STEP;
     }
   };
 
-  #handleViewAction = (actionType, updateType, updateFilm, updateComment) => {
+  #handleViewAction = async (actionType, updateType, updateFilm, updateComment) => {
     switch (actionType) {
       case UserAction.UPDATE_FILM:
-        this.#filmsModel.update(updateType, updateFilm);
+        try {
+          await this.#filmsModel.update(updateType, updateFilm);
+        } catch (err) {
+          // console.log('error');
+        }
         break;
       case UserAction.ADD_COMMENT:
-        this.#commentsModel.add(updateType, updateComment, updateFilm);
-        this.#filmDetailsPresenter.clearViewData();
-        this.#filmsModel.update(updateType, updateFilm);
+        try {
+          await this.#commentsModel.add(updateType, updateComment, updateFilm);
+          await this.#filmsModel.update(updateType, updateFilm);
+          this.#filmDetailsPresenter.clearViewData();
+        } catch (err) {
+          // console.log('error');
+        }
         break;
       case UserAction.DELETE_COMMENT:
-        this.#commentsModel.delete(updateType, updateComment, updateFilm);
-        this.#filmsModel.update(updateType, updateFilm);
+        try {
+          await this.#commentsModel.delete(updateType, updateComment, updateFilm);
+          await this.#filmsModel.update(updateType, updateFilm);
+        } catch (err) {
+          // console.log('error');
+        }
         break;
     }
   };

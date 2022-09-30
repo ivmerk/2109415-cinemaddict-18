@@ -3,10 +3,12 @@ import Observable from '../framework/observable.js';
 export default class CommentsModel extends Observable {
   #comments = [];
   #apiService = null;
+  #filmsModel = null;
 
-  constructor(apiService) {
+  constructor(apiService, filmsModel) {
     super();
     this.#apiService = apiService;
+    this.#filmsModel = filmsModel;
   }
 
   get = async (film) => {
