@@ -4,21 +4,21 @@ import { createFilmDetailsCommentsTemplate } from './film-details-comments-templ
 import { createFilmDetailsFormTemplate } from './film-details-form-template.js';
 
 
-const createFilmDetailsTemplate = ({ filmInfo, comments, userDetails, checkedEmotion, comment }) =>
+const createFilmDetailsTemplate = ({ filmInfo, comments, userDetails, checkedEmotion, comment, isDisabled, isDeleting }) =>
   `<section class="film-details">
     <div class="film-details__inner">
       <div class="film-details__top-container">
         <div class="film-details__close">
           <button class="film-details__close-btn" type="button">close</button>
         </div>
-        ${createFilmDetailsTopTemplate(filmInfo, userDetails)}
-        ${createFilmDetailsControlTemplate(userDetails)}
+        ${createFilmDetailsTopTemplate(filmInfo, userDetails, isDisabled)}
+        ${createFilmDetailsControlTemplate(userDetails, isDisabled)}
         <div class="film-details__bottom-container">
           <section class="film-details__comments-wrap">
             <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
 
-      ${createFilmDetailsCommentsTemplate(comments)}
-      ${createFilmDetailsFormTemplate(checkedEmotion, comment)}
+      ${createFilmDetailsCommentsTemplate(comments, isDeleting)}
+      ${createFilmDetailsFormTemplate(checkedEmotion, comment, isDisabled)}
 
           </section>
         </div>
@@ -30,7 +30,7 @@ const createFilmDetailsTemplate = ({ filmInfo, comments, userDetails, checkedEmo
 
 export default class FilmDetailsView extends AbstractStatefulView {
 
-  constructor(film, comments, viewData, updateViewData, isCommentLoadingError) {
+  constructor(film, comments, viewData, updateViewData, isFilmLoadingError, isCommentLoadingError,) {
     super();
     this._state = FilmDetailsView.parseFilmToState(
       film,
@@ -38,7 +38,8 @@ export default class FilmDetailsView extends AbstractStatefulView {
       viewData.emotion,
       viewData.comment,
       viewData.scrollPosition,
-      isCommentLoadingError
+      isFilmLoadingError,
+      isCommentLoadingError,
     );
 
     this.updateViewData = updateViewData;
@@ -63,6 +64,11 @@ export default class FilmDetailsView extends AbstractStatefulView {
       this.#setInnerHandlers();
       this.setCommentDeleteClickHandler(this._callback.commentDeleteClick);
     }
+  };
+
+  shakeControls = () => {
+    const controlElement = this.element.querySelector('.film-details__controls');
+    this.shakeAbsolute.call({ element: controlElement });
   };
 
   setScrollPosition = () => {
@@ -97,7 +103,6 @@ export default class FilmDetailsView extends AbstractStatefulView {
     }
   }
 
-
   #watchlistBtnClickHandler = (evt) => {
     evt.preventDefault();
     this.#updateViewData();
@@ -123,6 +128,9 @@ export default class FilmDetailsView extends AbstractStatefulView {
   };
 
   #emotionClickHendler = (evt) => {
+    if (this._state.isDisable) {
+      return;
+    }
     evt.preventDefault();
     this.updateElement({
       checkedEmotion: evt.currentTarget.dataset.emotionType,
@@ -161,12 +169,20 @@ export default class FilmDetailsView extends AbstractStatefulView {
     comments,
     checkedEmotion = null,
     comment = null,
-    scrollPosition = 0
+    scrollPosition = 0,
+    isFilmLoadingError = false,
+    isCommentLoadingError = false,
+    isDisabled = false,
+    isDeleting = false
   ) => ({
     ...film,
     comments,
     checkedEmotion,
     comment,
-    scrollPosition
+    scrollPosition,
+    isFilmLoadingError,
+    isCommentLoadingError,
+    isDisabled,
+    isDeleting,
   });
 }

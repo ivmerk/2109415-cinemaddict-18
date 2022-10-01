@@ -2,7 +2,9 @@ import ApiService from '../framework/api-service.js';
 import { Method } from '../const.js';
 
 export default class FilmsApiService extends ApiService {
-  get = () => this._load({ url: 'movies' }).then(ApiService.parseResponse);
+  get = () => this._load({ url: 'movies' })
+    .then(ApiService.parseResponse)
+    .catch(() => null);
 
   update = async (film) => {
     const response = await this._load({

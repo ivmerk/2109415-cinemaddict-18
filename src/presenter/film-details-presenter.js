@@ -139,7 +139,7 @@ export default class FilmDetailsPresenter {
       id: newCommentId,
       author: 'Ivan',
       comment: this.#viewData.comment,
-      emotion: this.#viewData.emotion,
+      emotion: (this.#viewData.emotion) ? this.#viewData.emotion : 'smile',
       date: dayjs().format(),
     };
 
@@ -176,6 +176,23 @@ export default class FilmDetailsPresenter {
       },
       deletedComment
     );
+  };
+
+  setDeleting = () => {
+    this.#filmDetailsViewComponent.updateElement({
+      isDeleting: true,
+    });
+  };
+
+  setSaving = () => {
+    this.#filmDetailsViewComponent.updateElement({
+      isDisabled: true,
+    });
+  };
+
+  setAborting = () => {
+    this.#filmDetailsViewComponent.updateElement({ isDisabled: false, isDeleting: false });
+    this.#filmDetailsViewComponent.shakeControls();
   };
 
   #updateViewData = (viewData) => {
