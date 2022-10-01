@@ -1,7 +1,7 @@
 import FilmsListView from '../view/films-list-view.js';
 import ListCardsView from '../view/list-cards-view.js';
 import { remove, render, RenderPosition } from '../framework/render.js';
-import { FilterType, SortingFiltersType, UpdateType, UserAction } from '../const.js';
+import { FILM_COUNT_PER_STEP, FilterType, SortingFiltersType, UpdateType, UserAction } from '../const.js';
 import FilmCardPresenter from './film-card-presenter.js';
 import ShowMoreButtonPresenter from './show-more-botton-presenter.js';
 import { sortByDate, sortByRate } from '../utils/utils.js';
@@ -11,8 +11,6 @@ import NoFilmsView from '../view/nofilms-view.js';
 import SortFilltersMenuView from '../view/sort-fillters-menu-view.js';
 import FilmListLoadingView from '../view/film-list-loading-view.js';
 
-
-const FILM_COUNT_PER_STEP = 5;
 
 export default class FilmsListPresenter {
   #sortComponent = null;
@@ -69,30 +67,36 @@ export default class FilmsListPresenter {
   #handleViewAction = async (actionType, updateType, updateFilm, updateComment) => {
     switch (actionType) {
       case UserAction.UPDATE_FILM:
+        if (this.#filmDetailsPresenter) {
+          this.#filmDetailsPresenter.setSaving();
+        }
+        this.#filmCardPresenters.get(updateFilm.id).setSaving();
         try {
           await this.#filmsModel.update(updateType, updateFilm);
         } catch (err) {
-          // console.log('error');
+          if (this.#filmDetailsPresenter) {
+            this.#filmDetailsPresenter.setAborting();
+          }
+          this.#filmCardPresenters.get(updateFilm.id).setAborting();
         }
         break;
       case UserAction.ADD_COMMENT:
-        if (!updateComment.emotion) {
-          updateComment.emotion = 'smile';
-        }
+        this.#filmDetailsPresenter.setSaving();
         try {
           await this.#commentsModel.add(updateType, updateComment, updateFilm);
           await this.#filmsModel.update(updateType, updateFilm);
           this.#filmDetailsPresenter.clearViewData();
         } catch (err) {
-          // console.log('error');
+          this.#filmDetailsPresenter.setAborting();
         }
         break;
       case UserAction.DELETE_COMMENT:
+        this.#filmDetailsPresenter.setDeleting();
         try {
           await this.#commentsModel.delete(updateType, updateComment, updateFilm);
           await this.#filmsModel.update(updateType, updateFilm);
         } catch (err) {
-          // console.log('error');
+          this.#filmDetailsPresenter.setAborting();
         }
         break;
     }
