@@ -44,5 +44,12 @@ const sortByRate = (filmA, filmB) => {
   }
 };
 
+const sortByComments = (filmA, filmB) => {
+  if (filmA.comments.length < filmB.comments.length) {
+    return 1;
+  } else {
+    return -1;
+  }
+};
 
-export { sortByDate, sortByRate, getRandomInteger, getRandomValue, getRandomFloat, formatStringToDateWithTime, formatStringToDate, formatStringToYear, formatMinutesToTime };
+export { sortByComments, sortByDate, sortByRate, getRandomInteger, getRandomValue, getRandomFloat, formatStringToDateWithTime, formatStringToDate, formatStringToYear, formatMinutesToTime };
