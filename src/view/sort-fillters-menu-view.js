@@ -1,7 +1,7 @@
-import AbstractView from '../framework/view/abstract-view';
+import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import { SortingFiltersType } from '../const.js';
 
-const createFilltersMenuTemplate = (currentSortType) => (
+const createFilltersMenuTemplate = ({ currentSortType }) => (
   `<ul class="sort">
 <li><a href="#" class="sort__button ${currentSortType === SortingFiltersType.DEFAULT ? 'sort__button--active' : ''}" data-sort-type="${SortingFiltersType.DEFAULT}">Sort by default</a></li>
 <li><a href="#" class="sort__button ${currentSortType === SortingFiltersType.DATE ? 'sort__button--active' : ''}" data-sort-type="${SortingFiltersType.DATE}">Sort by date</a></li>
@@ -9,18 +9,21 @@ const createFilltersMenuTemplate = (currentSortType) => (
 `
 );
 
-export default class SortFilltersMenuView extends AbstractView {
-
-  #currentSortType = null;
+export default class SortFilltersMenuView extends AbstractStatefulView {
 
   constructor(currentSortType) {
     super();
-    this.#currentSortType = currentSortType;
+    this._state = SortFilltersMenuView.parseSortToState(currentSortType);
+
   }
 
   get template() {
-    return createFilltersMenuTemplate(this.#currentSortType);
+    return createFilltersMenuTemplate(this._state);
   }
+
+  _restoreHandlers = () => {
+    this.setSortTypeChangeHandler(this._callback.sortTypeChange);
+  };
 
   setSortTypeChangeHandler = (callback) => {
     this._callback.sortTypeChange = callback;
@@ -36,4 +39,9 @@ export default class SortFilltersMenuView extends AbstractView {
     this._callback.sortTypeChange(evt.target.dataset.sortType);
   };
 
+  static parseSortToState = (
+    currentSortType,
+  ) => ({
+    currentSortType,
+  });
 }
