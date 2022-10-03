@@ -35,6 +35,10 @@ export default class FilmCardPresenter {
     }
   };
 
+  get element() {
+    return this.#filmCardViewComponent.element;
+  }
+
   #setHandles = () => {
     this.#filmCardViewComponent.setCardClickHandler(() => {
       this.#clickCardHandler(this.#film);
@@ -52,7 +56,6 @@ export default class FilmCardPresenter {
   };
 
   setAborting = () => {
-    // debugger
     this.#filmCardViewComponent.updateElement({ isDisabled: false });
     this.#filmCardViewComponent.shakeControls();
   };
