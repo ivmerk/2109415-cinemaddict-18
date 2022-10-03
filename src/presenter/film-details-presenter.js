@@ -191,7 +191,6 @@ export default class FilmDetailsPresenter {
   };
 
   setAbortingAddComment = () => {
-
   };
 
   setAbortingDeleteComment = () => { };
