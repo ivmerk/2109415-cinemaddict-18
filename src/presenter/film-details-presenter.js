@@ -193,7 +193,11 @@ export default class FilmDetailsPresenter {
   setAbortingAddComment = () => {
   };
 
-  setAbortingDeleteComment = () => { };
+  setAbortingDeleteComment = (commentId) => {
+    this.#filmDetailsViewComponent.setScrollPosition();
+    this.#filmDetailsViewComponent.updateElement({ isDisabled: false, isDeleting: false });
+    this.#filmDetailsViewComponent.shakeDeleting(commentId);
+  };
 
   setAbortingUpdateFilm = () => {
     this.#filmDetailsViewComponent.updateElement({ isDisabled: false, isDeleting: false });

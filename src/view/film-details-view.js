@@ -71,6 +71,13 @@ export default class FilmDetailsView extends AbstractStatefulView {
     this.shakeAbsolute.call({ element: controlElement });
   };
 
+
+  shakeDeleting = (commentId) => {
+    const listOfComments = Array.prototype.slice.call(this.element.querySelectorAll('.film-details__comment-delete'));
+    const commentElement = listOfComments.find((comment) => comment.dataset.commentId === commentId);
+    this.shakeAbsolute.call({ element: commentElement.parentNode.parentNode.parentNode });
+  };
+
   setScrollPosition = () => {
     this.element.scrollTop = this._state.scrollPosition;
   };
@@ -93,7 +100,6 @@ export default class FilmDetailsView extends AbstractStatefulView {
 
   setCommentDeleteClickHandler(cb) {
     const commentDeleteElement = this.element.querySelectorAll('.film-details__comment-delete');
-
     if (commentDeleteElement) {
       this._callback.commentDeleteClick = cb;
       commentDeleteElement.forEach(
@@ -123,6 +129,9 @@ export default class FilmDetailsView extends AbstractStatefulView {
 
   #commentDeleteClickHandler = (evt) => {
     evt.preventDefault();
+    this.updateElement({
+      scrollPosition: this.element.scrollTop
+    });
     this.#updateViewData();
     this._callback.commentDeleteClick(evt.currentTarget.dataset.commentId);
   };
