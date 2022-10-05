@@ -16,7 +16,6 @@ const bodyElement = document.querySelector('body');
 const siteMainElement = bodyElement.querySelector('.main');
 const siteHeaderElement = bodyElement.querySelector('.header');
 const siteFooterElement = bodyElement.querySelector('.footer');
-// const siteFooterStatisticsElement = siteFooterElement.querySelector('.footer__statistics');
 
 const filmsModel = new FilmsModel(new FilmsApiService(END_POINT, AUTHORIZATION));
 const commentsModel = new CommentsModel(new CommentsApiService(END_POINT, AUTHORIZATION), filmsModel);

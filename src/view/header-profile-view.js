@@ -26,9 +26,9 @@ export default class HeaderProfileView extends AbstractView {
       if (this.#filmsCount > 10) { return 'Fan'; }
       else {
         if (this.#filmsCount) { return 'Novice'; }
-        else { return ''; }
       }
     }
+    return '';
   }
 
 
