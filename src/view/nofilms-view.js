@@ -3,7 +3,7 @@ import { FilterType } from '../const.js';
 
 
 const NoFilmsTaskType = {
-  [FilterType.ALL]: 'There are no films now',
+  [FilterType.ALL]: 'There are no movies in our database',
   [FilterType.WATCHLIST]: 'There are no films in watchlist now',
   [FilterType.HISTORY]: 'There are no watched films now',
   [FilterType.FAVORITES]: 'There are no favorites films now',

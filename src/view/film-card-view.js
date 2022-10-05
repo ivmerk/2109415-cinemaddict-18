@@ -21,7 +21,7 @@ const createFilmCardTemplate = ({ filmInfo, comments, userDetails, isDisabled })
         <span class="film-card__genre">${filmInfo.genre[0]}</span>
       </p>
       <img src="./${filmInfo.poster}" alt="" class="film-card__poster">
-      <p class="film-card__description">${filmInfo.description}</p>
+      <p class="film-card__description">${(filmInfo.description.length < 139) ? filmInfo.description : `${filmInfo.description.slice(0, 139)}...`}</p>
       <span class="film-card__comments">${comments.length} comments</span>
     </a>
    ${createFilmCardControlItemsTemplate(userDetails, isDisabled)}

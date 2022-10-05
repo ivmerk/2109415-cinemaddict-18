@@ -1,5 +1,4 @@
-import dayjs from 'dayjs';
-import { formatStringToYear } from '../utils/utils.js';
+import { formatStringToDate, formatMinutesToTime } from '../utils/utils.js';
 
 const createFilmDetailsTopTemplate = (filmInfo) =>
   `
@@ -37,11 +36,11 @@ const createFilmDetailsTopTemplate = (filmInfo) =>
       </tr>
       <tr class="film-details__row">
         <td class="film-details__term">Release Date</td>
-        <td class="film-details__cell">${formatStringToYear(filmInfo.release.date)}</td>
+        <td class="film-details__cell">${formatStringToDate(filmInfo.release.date)}</td>
       </tr >
       <tr class="film-details__row">
         <td class="film-details__term">Runtime</td>
-        <td class="film-details__cell">${dayjs().minute(filmInfo.runtime).format('h[h ]m[m]')}</td>
+        <td class="film-details__cell">${formatMinutesToTime(filmInfo.runtime)}</td>
       </tr>
       <tr class="film-details__row">
         <td class="film-details__term">Country</td>

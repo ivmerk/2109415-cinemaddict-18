@@ -190,7 +190,13 @@ export default class FilmDetailsPresenter {
     });
   };
 
-  setAborting = () => {
+  setAbortingAddComment = () => {
+
+  };
+
+  setAbortingDeleteComment = () => { };
+
+  setAbortingUpdateFilm = () => {
     this.#filmDetailsViewComponent.updateElement({ isDisabled: false, isDeleting: false });
     this.#filmDetailsViewComponent.shakeControls();
   };
