@@ -4,6 +4,7 @@ import { createFilmDetailsCommentsTemplate } from './film-details-comments-templ
 import { createFilmDetailsFormTemplate } from './film-details-form-template.js';
 
 
+
 const createFilmDetailsTemplate = ({ filmInfo, comments, userDetails, checkedEmotion, comment, isDisabled, isDeleting, deletedComment }) =>
   `<section class="film-details">
     <div class="film-details__inner">
@@ -20,7 +21,9 @@ const createFilmDetailsTemplate = ({ filmInfo, comments, userDetails, checkedEmo
       ${createFilmDetailsCommentsTemplate(comments, isDeleting, deletedComment)}
       ${createFilmDetailsFormTemplate(checkedEmotion, comment, isDisabled)}
 
+
           </section>
+
         </div>
       </div>
     </div>
@@ -32,6 +35,7 @@ export default class FilmDetailsView extends AbstractStatefulView {
 
   constructor(film, comments, viewData, updateViewData, isFilmLoadingError, isCommentLoadingError,) {
     super();
+
     this._state = FilmDetailsView.parseFilmToState(
       film,
       comments,
@@ -110,6 +114,7 @@ export default class FilmDetailsView extends AbstractStatefulView {
     evt.preventDefault();
     this.#updateViewData();
     this._callback.favoriteBtnClick();
+
   };
 
   #commentDeleteClickHandler = (evt) => {
