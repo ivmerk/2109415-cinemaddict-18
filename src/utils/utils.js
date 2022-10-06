@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 
+// dayjs.extend(relativeTime);
 dayjs.extend(duration);
 // Функция из интернета по генерации случайного числа из диапазона
 // Источник - https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_random
