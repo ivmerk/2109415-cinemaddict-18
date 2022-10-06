@@ -73,11 +73,9 @@ export default class FilmCardView extends AbstractStatefulView {
     this._callback.watchlistBtnClick();
   };
 
-
   setWatchedBtnClickHandler = (cb) => {
     this._callback.watchedBtnClick = cb;
     this.element.children[1].querySelector('.film-card__controls-item--mark-as-watched').addEventListener('click', this.#watchedBtnClickHandler);
-
   };
 
   #watchedBtnClickHandler = (evt) => {
@@ -88,7 +86,6 @@ export default class FilmCardView extends AbstractStatefulView {
   setFavoriteBtnClickHandler = (cb) => {
     this._callback.favoriteBtnClick = cb;
     this.element.children[1].querySelector('.film-card__controls-item--favorite').addEventListener('click', this.#favoriteBtnClickHandler);
-
   };
 
   #favoriteBtnClickHandler = (evt) => {

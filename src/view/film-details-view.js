@@ -3,7 +3,6 @@ import { createFilmDetailsControlTemplate, createFilmDetailsTopTemplate } from '
 import { createFilmDetailsCommentsTemplate } from './film-details-comments-template.js';
 import { createFilmDetailsFormTemplate } from './film-details-form-template.js';
 
-
 const createFilmDetailsTemplate = ({ filmInfo, comments, userDetails, checkedEmotion, comment, isDisabled, isDeleting, deletedComment }) =>
   `<section class="film-details">
     <div class="film-details__inner">
@@ -26,7 +25,6 @@ const createFilmDetailsTemplate = ({ filmInfo, comments, userDetails, checkedEmo
     </div>
     </section>
     `;
-
 
 export default class FilmDetailsView extends AbstractStatefulView {
 
@@ -66,7 +64,6 @@ export default class FilmDetailsView extends AbstractStatefulView {
     }
   };
 
-
   setWatchlistBtnClickHandler = (cb) => {
     this._callback.watchlistBtnClick = cb;
     this.element.children[0].querySelector('.film-details__control-button--watchlist').addEventListener('click', this.#watchlistBtnClickHandler);
@@ -83,7 +80,7 @@ export default class FilmDetailsView extends AbstractStatefulView {
     this.element.children[0].querySelector('.film-details__control-button--favorite').addEventListener('click', this.#favoriteBtnClickHandler);
   };
 
-  setCommentDeleteClickHandler(cb) {
+  setCommentDeleteClickHandler = (cb) => {
     const commentDeleteElement = this.element.querySelectorAll('.film-details__comment-delete');
     if (commentDeleteElement) {
       this._callback.commentDeleteClick = cb;
@@ -92,7 +89,7 @@ export default class FilmDetailsView extends AbstractStatefulView {
           element.addEventListener('click', this.#commentDeleteClickHandler)
       );
     }
-  }
+  };
 
   #watchlistBtnClickHandler = (evt) => {
     evt.preventDefault();
@@ -145,18 +142,17 @@ export default class FilmDetailsView extends AbstractStatefulView {
     this.element.querySelector('.film-details__comment-input').addEventListener('input', this.#commentInputChangeHandler);
   };
 
-
-  setCloseBtnClickHandler(callback) {
+  setCloseBtnClickHandler = (callback) => {
     this._callback.closeBtnClick = callback;
-  }
+  };
 
-  #updateViewData = () =>
+  #updateViewData = () => {
     this.updateViewData({
       emotion: this._state.checkedEmotion,
       comment: this._state.comment,
       scrollPosition: this.element.scrollTop
     });
-
+  };
 
   shakeControls = () => {
     const controlElement = this.element.querySelector('.film-details__controls');

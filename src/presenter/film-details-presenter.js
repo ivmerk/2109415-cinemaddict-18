@@ -63,8 +63,6 @@ export default class FilmDetailsPresenter {
     this.#filmDetailsViewComponent.setWatchedBtnClickHandler(this.#watchedBtnClickHandler);
     this.#filmDetailsViewComponent.setFavoriteBtnClickHandler(this.#favoriteBtnClickHandler);
     this.#filmDetailsViewComponent.setCommentDeleteClickHandler(this.#commentDeleteClickHandler);
-
-
   };
 
   #watchlistBtnClickHandler = () => {
@@ -124,7 +122,6 @@ export default class FilmDetailsPresenter {
       },
       newComment
     );
-
   };
 
   #commentDeleteClickHandler = (commentId) => {
@@ -175,7 +172,6 @@ export default class FilmDetailsPresenter {
     this.#viewData.comment = null;
     this.#viewData.emotion = null;
   };
-
 
   setDeleting = (commentId) => {
     this.#filmDetailsViewComponent.updateElement({

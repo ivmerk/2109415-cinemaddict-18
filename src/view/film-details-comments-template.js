@@ -26,7 +26,6 @@ const createCommentTemlate = ({ emotion, comment, author, date, id }, isDeleting
 
 export const createFilmDetailsCommentsTemplate = (comments, isDeleting, deletedComment) =>
   `
-
   <ul class="film-details__comments-list">
     ${comments.map((comment) => createCommentTemlate(comment, isDeleting, deletedComment)).join('')}
   </ul >

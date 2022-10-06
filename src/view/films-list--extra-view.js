@@ -4,7 +4,6 @@ const createFilmsListExtraViewTemplate = () => '<section class="films-list films
 
 export default class FilmsListExtraView extends AbstractView {
 
-
   get template() {
     return createFilmsListExtraViewTemplate();
   }

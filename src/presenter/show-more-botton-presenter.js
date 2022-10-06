@@ -21,7 +21,6 @@ export default class ShowMoreButtonPresenter {
     this.#showMoreFilmCards();
   };
 
-
   remove = () => {
     this.#showMoreFilmsButtonComponent.element.remove();
     this.#showMoreFilmsButtonComponent.removeElement();

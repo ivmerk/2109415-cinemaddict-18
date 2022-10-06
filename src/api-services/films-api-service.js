@@ -19,7 +19,7 @@ export default class FilmsApiService extends ApiService {
     return parsedResponse;
   };
 
-  #adaptToServer(film) {
+  #adaptToServer = (film) => {
     const adaptedFilm = {
       ...film,
       ['film_info']: {
@@ -48,5 +48,5 @@ export default class FilmsApiService extends ApiService {
     delete adaptedFilm['user_details'].watchingDate;
 
     return adaptedFilm;
-  }
+  };
 }

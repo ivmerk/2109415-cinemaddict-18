@@ -3,7 +3,6 @@ import FilterPresenter from './presenter/filter-presenter.js';
 import FilmsModel from './model/films-model.js';
 import CommentsModel from './model/comments-model.js';
 import FilterModel from './model/filter-model.js';
-
 import FilmsApiService from './api-services/films-api-service.js';
 import CommentsApiService from './api-services/comments-api-service.js';
 import HeaderProfilePresenter from './presenter/header-profile-presenter.js';

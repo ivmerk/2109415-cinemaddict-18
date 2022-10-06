@@ -14,7 +14,6 @@ import TopRatedView from '../view/top-rated-view.js';
 import MostCommentedView from '../view/most-commendet-view.js';
 import FilmsView from '../view/films-view.js';
 
-
 export default class FilmsListPresenter {
   #sortComponent = null;
   #listCardsView = new ListCardsView();
@@ -52,8 +51,6 @@ export default class FilmsListPresenter {
     this.#filmsModel = filmsModel;
     this.#commentsModel = commentsModel;
     this.#filterModel = filterModel;
-
-
     this.#filmsModel.addObserver(this.#handleModelEvent);
     this.#filterModel.addObserver(this.#handleModelEvent);
   }
@@ -73,14 +70,12 @@ export default class FilmsListPresenter {
     return filteredFilms;
   }
 
-
   init = () => {
     this.#renderBoard();
     if (!this.#renderedFilmCount) {
       this.#renderedFilmCount = FILM_COUNT_PER_STEP;
     }
   };
-
 
   #handleViewAction = async (actionType, updateType, updateFilm, updateComment) => {
     switch (actionType) {
@@ -171,7 +166,6 @@ export default class FilmsListPresenter {
     const sortedCommentedFilms = films.sort(sortByComments);
     return [sortedCommentedFilms[0], sortedCommentedFilms[1]];
   };
-
 
   #renderSort = () => {
     this.#sortComponent = new SortFilltersMenuView(this.#currentSortType);
@@ -323,7 +317,6 @@ export default class FilmsListPresenter {
     render(this.#topRatingFilmsViewComponent, this.#filmsComponent.element, RenderPosition.BEFOREEND);
   };
 
-
   #renderMostCommentedElement = () => {
     if (!this.#topCommentedFilmsViewComponent) {
       this.#topCommentedFilmsViewComponent = new MostCommentedView();
@@ -343,7 +336,6 @@ export default class FilmsListPresenter {
     }
     render(this.#topCommentedFilmsViewComponent, this.#filmsComponent.element, RenderPosition.BEFOREEND);
   };
-
 
   #renderBoard = () => {
     render(this.#filmsListComponent, this.#filmsComponent.element, RenderPosition.AFTERBEGIN);

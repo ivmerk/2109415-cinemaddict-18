@@ -34,7 +34,6 @@ export default class SortFilltersMenuView extends AbstractStatefulView {
     if (evt.target.tagName !== 'A') {
       return;
     }
-
     evt.preventDefault();
     this._callback.sortTypeChange(evt.target.dataset.sortType);
   };

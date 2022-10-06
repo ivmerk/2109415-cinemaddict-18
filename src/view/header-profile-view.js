@@ -1,6 +1,5 @@
 import AbstractView from '../framework/view/abstract-view';
 
-
 const createProfileRatingTemplate = (filmsCount) =>
   `<section class="header__profile profile">
     <p class="profile__rating">${filmsCount}</p>
@@ -15,17 +14,14 @@ export default class HeaderProfileView extends AbstractView {
     this.#filmsCount = filmsCount;
   }
 
-
   get template() {
     return createProfileRatingTemplate(this.#getGrade());
   }
 
-  #getGrade() {
+  #getGrade = () => {
     if (this.#filmsCount >= 21) { return 'Movie Buff'; }
     else if (this.#filmsCount > 10) { return 'Fan'; }
     else if (this.#filmsCount) { return 'Novice'; }
     return '';
-  }
-
-
+  };
 }

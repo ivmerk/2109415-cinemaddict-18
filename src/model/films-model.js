@@ -45,7 +45,7 @@ export default class FilmsModel extends Observable {
     }
   };
 
-  #adaptToClient(film) {
+  #adaptToClient = (film) => {
     const adaptedFilm = {
       ...film,
       filmInfo: {
@@ -74,5 +74,5 @@ export default class FilmsModel extends Observable {
     delete adaptedFilm.userDetails['already_watched'];
     delete adaptedFilm.userDetails['watching_date'];
     return adaptedFilm;
-  }
+  };
 }

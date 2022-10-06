@@ -34,7 +34,6 @@ export default class NavigationFilltersMenuView extends AbstractView {
     this.#currentFilterType = currentFilterType;
   }
 
-
   get template() {
     return createFilltersMenuTemplate(this.#filter, this.#currentFilterType);
   }
