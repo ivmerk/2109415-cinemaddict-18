@@ -19,6 +19,10 @@ export default class FilmCardPresenter {
     this.#escKeyDownHandler = escKeyDownHandler;
   }
 
+  get element() {
+    return this.#filmCardViewComponent.element;
+  }
+
   init = (film) => {
     this.#film = film;
 
@@ -35,10 +39,6 @@ export default class FilmCardPresenter {
     }
   };
 
-  get element() {
-    return this.#filmCardViewComponent.element;
-  }
-
   #setHandles = () => {
     this.#filmCardViewComponent.setCardClickHandler(() => {
       this.#clickCardHandler(this.#film);
@@ -47,17 +47,6 @@ export default class FilmCardPresenter {
     this.#filmCardViewComponent.setWatchlistBtnClickHandler(this.#watchlistBtnClickHandler);
     this.#filmCardViewComponent.setWatchedBtnClickHandler(this.#watchedBtnClickHandler);
     this.#filmCardViewComponent.setFavoriteBtnClickHandler(this.#favoriteBtnClickHandler);
-  };
-
-  setSaving = () => {
-    this.#filmCardViewComponent.updateElement({
-      isDisabled: true,
-    });
-  };
-
-  setAborting = () => {
-    this.#filmCardViewComponent.updateElement({ isDisabled: false });
-    this.#filmCardViewComponent.shakeControls();
   };
 
   #watchlistBtnClickHandler = () => {
@@ -95,6 +84,18 @@ export default class FilmCardPresenter {
       }
     );
   };
+
+  setSaving = () => {
+    this.#filmCardViewComponent.updateElement({
+      isDisabled: true,
+    });
+  };
+
+  setAborting = () => {
+    this.#filmCardViewComponent.updateElement({ isDisabled: false });
+    this.#filmCardViewComponent.shakeControls();
+  };
+
 
   destroy = () => {
     remove(this.#filmCardViewComponent);

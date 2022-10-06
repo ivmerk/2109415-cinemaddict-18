@@ -11,14 +11,15 @@ export default class CommentsModel extends Observable {
     this.#filmsModel = filmsModel;
   }
 
+  get length() {
+    return this.#comments.length;
+  }
+
+
   get = async (film) => {
     this.#comments = await this.#apiService.get(film);
     return this.#comments;
   };
-
-  get length() {
-    return this.#comments.length;
-  }
 
   add = async (updateType, update, film) => {
     try {

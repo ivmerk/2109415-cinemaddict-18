@@ -22,12 +22,8 @@ export default class HeaderProfileView extends AbstractView {
 
   #getGrade() {
     if (this.#filmsCount >= 21) { return 'Movie Buff'; }
-    else {
-      if (this.#filmsCount > 10) { return 'Fan'; }
-      else {
-        if (this.#filmsCount) { return 'Novice'; }
-      }
-    }
+    else if (this.#filmsCount > 10) { return 'Fan'; }
+    else if (this.#filmsCount) { return 'Novice'; }
     return '';
   }
 

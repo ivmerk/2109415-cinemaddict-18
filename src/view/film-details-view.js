@@ -4,7 +4,8 @@ import { createFilmDetailsCommentsTemplate } from './film-details-comments-templ
 import { createFilmDetailsFormTemplate } from './film-details-form-template.js';
 
 
-const createFilmDetailsTemplate = ({ filmInfo, comments, userDetails, checkedEmotion, comment, isDisabled, isDeleting }) =>
+
+const createFilmDetailsTemplate = ({ filmInfo, comments, userDetails, checkedEmotion, comment, isDisabled, isDeleting, deletedComment }) =>
   `<section class="film-details">
     <div class="film-details__inner">
       <div class="film-details__top-container">
@@ -17,10 +18,12 @@ const createFilmDetailsTemplate = ({ filmInfo, comments, userDetails, checkedEmo
           <section class="film-details__comments-wrap">
             <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
 
-      ${createFilmDetailsCommentsTemplate(comments, isDeleting)}
+      ${createFilmDetailsCommentsTemplate(comments, isDeleting, deletedComment)}
       ${createFilmDetailsFormTemplate(checkedEmotion, comment, isDisabled)}
 
+
           </section>
+
         </div>
       </div>
     </div>
@@ -32,6 +35,7 @@ export default class FilmDetailsView extends AbstractStatefulView {
 
   constructor(film, comments, viewData, updateViewData, isFilmLoadingError, isCommentLoadingError,) {
     super();
+
     this._state = FilmDetailsView.parseFilmToState(
       film,
       comments,
@@ -66,14 +70,6 @@ export default class FilmDetailsView extends AbstractStatefulView {
     }
   };
 
-  shakeControls = () => {
-    const controlElement = this.element.querySelector('.film-details__controls');
-    this.shakeAbsolute.call({ element: controlElement });
-  };
-
-  setScrollPosition = () => {
-    this.element.scrollTop = this._state.scrollPosition;
-  };
 
   setWatchlistBtnClickHandler = (cb) => {
     this._callback.watchlistBtnClick = cb;
@@ -93,7 +89,6 @@ export default class FilmDetailsView extends AbstractStatefulView {
 
   setCommentDeleteClickHandler(cb) {
     const commentDeleteElement = this.element.querySelectorAll('.film-details__comment-delete');
-
     if (commentDeleteElement) {
       this._callback.commentDeleteClick = cb;
       commentDeleteElement.forEach(
@@ -119,10 +114,14 @@ export default class FilmDetailsView extends AbstractStatefulView {
     evt.preventDefault();
     this.#updateViewData();
     this._callback.favoriteBtnClick();
+
   };
 
   #commentDeleteClickHandler = (evt) => {
     evt.preventDefault();
+    this.updateElement({
+      scrollPosition: this.element.scrollTop
+    });
     this.#updateViewData();
     this._callback.commentDeleteClick(evt.currentTarget.dataset.commentId);
   };
@@ -140,7 +139,10 @@ export default class FilmDetailsView extends AbstractStatefulView {
 
   #commentInputChangeHandler = (evt) => {
     evt.preventDefault();
-    this._setState({ comment: evt.target.value });
+    this._setState({
+      comment: evt.target.value,
+      scrollPosition: this.element.scrollTop
+    });
   };
 
   #setInnerHandlers = () => {
@@ -148,9 +150,6 @@ export default class FilmDetailsView extends AbstractStatefulView {
     this.element.querySelector('.film-details__comment-input').addEventListener('input', this.#commentInputChangeHandler);
   };
 
-  updateCommentData = () => {
-    this.#updateViewData();
-  };
 
   setCloseBtnClickHandler(callback) {
     this._callback.closeBtnClick = callback;
@@ -164,6 +163,31 @@ export default class FilmDetailsView extends AbstractStatefulView {
     });
 
 
+  shakeControls = () => {
+    const controlElement = this.element.querySelector('.film-details__controls');
+    this.shakeAbsolute.call({ element: controlElement });
+  };
+
+  shakeNewCommentForm = () => {
+    const newCommentFormElement = this.element.querySelector('.film-details__new-comment');
+    this.shakeAbsolute.call({ element: newCommentFormElement });
+  };
+
+  shakeDeleting = (commentId) => {
+    const listOfComments = Array.prototype.slice.call(this.element.querySelectorAll('.film-details__comment-delete'));
+    const commentElement = listOfComments.find((comment) => comment.dataset.commentId === commentId);
+    const sheckedElement = commentElement.parentNode.parentNode.parentNode;
+    this.shakeAbsolute.call({ element: sheckedElement });
+  };
+
+  setScrollPosition = () => {
+    this.element.scrollTop = this._state.scrollPosition;
+  };
+
+  updateCommentData = () => {
+    this.#updateViewData();
+  };
+
   static parseFilmToState = (
     film,
     comments,
@@ -173,7 +197,8 @@ export default class FilmDetailsView extends AbstractStatefulView {
     isFilmLoadingError = false,
     isCommentLoadingError = false,
     isDisabled = false,
-    isDeleting = false
+    isDeleting = false,
+    deletedComment = null,
   ) => ({
     ...film,
     comments,
@@ -184,5 +209,6 @@ export default class FilmDetailsView extends AbstractStatefulView {
     isCommentLoadingError,
     isDisabled,
     isDeleting,
+    deletedComment
   });
 }
