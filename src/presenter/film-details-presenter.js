@@ -1,58 +1,215 @@
 import FilmDetailsView from '../view/film-details-view';
 import { render } from '../framework/render.js';
+import { UserAction, UpdateType } from '../const';
+import dayjs from 'dayjs';
 
 export default class FilmDetailsPresenter {
   #filmDetailsViewComponent = null;
-  #filmDetailsContainer = null;
-  #commentsModel = null;
-  #filmModel = null;
-  #removeFilmDetailsPresenter = null;
-  #closeButtonDetailsElement = null;
 
-  constructor(filmDetailsContainer, removeFilmDetailsPresenter) {
-    this.#filmDetailsContainer = filmDetailsContainer;
-    this.#removeFilmDetailsPresenter = removeFilmDetailsPresenter;
+  #container = null;
+  #comments = null;
+  #film = null;
+  #closeBtnClickHandler = null;
+  #closeButtonDetailsElement = null;
+  #totalCommentsAmount = null;
+  #viewData = {
+    emotion: null,
+    comment: null,
+    scrollPosition: 0
+  };
+
+  #changeData = null;
+
+  constructor(container, closeBtnClickHandler, handleViewAction) {
+    this.#container = container;
+    this.#closeBtnClickHandler = closeBtnClickHandler;
+    this.#changeData = handleViewAction;
   }
 
-  init = (film, comments) => {
-    this.#commentsModel = comments;
-    this.#filmModel = film;
-    this.#filmDetailsViewComponent = new FilmDetailsView(this.#filmModel, this.#commentsModel);
-    this.#setHandlers();
-    render(this.#filmDetailsViewComponent, this.#filmDetailsContainer);
+  init = (film, comments, isCommentLoadingError) => {
+
+    this.#film = film;
+
+    this.#comments = (!isCommentLoadingError)
+      ? comments
+      : [];
+
+    const prevFilmDetailsViewComponent = this.#filmDetailsViewComponent;
+
+    this.#filmDetailsViewComponent = new FilmDetailsView(
+      this.#film,
+      this.#comments,
+      this.#viewData,
+      this.#updateViewData,
+      isCommentLoadingError
+    );
+
+    if (!isCommentLoadingError) {
+      this.#setHandlers();
+    }
+    if (prevFilmDetailsViewComponent === null) {
+      render(this.#filmDetailsViewComponent, this.#container);
+    }
+    this.#filmDetailsViewComponent.setScrollPosition();
   };
 
   #setHandlers = () => {
-    document.addEventListener('keydown', this.#onEscKeyDown);
+    document.addEventListener('keydown', this.#onKeyDown);
     this.#closeButtonDetailsElement = this.#filmDetailsViewComponent.element.querySelector('.film-details__close-btn');
-    this.#filmDetailsContainer.classList.add('hide-overflow');
     this.#closeButtonDetailsElement.addEventListener('click', () => {
-      this.#removeFilmDetailsPresenter();
-      document.removeEventListener('keydown', this.#onEscKeyDown);
+      this.#closeBtnClickHandler();
+      document.removeEventListener('keydown', this.#onKeyDown);
+
     });
+    this.#filmDetailsViewComponent.setWatchlistBtnClickHandler(this.#watchlistBtnClickHandler);
+    this.#filmDetailsViewComponent.setWatchedBtnClickHandler(this.#watchedBtnClickHandler);
+    this.#filmDetailsViewComponent.setFavoriteBtnClickHandler(this.#favoriteBtnClickHandler);
+    this.#filmDetailsViewComponent.setCommentDeleteClickHandler(this.#commentDeleteClickHandler);
 
-    this.#filmDetailsViewComponent.setButtonClickHandler(this.#filmButtonClickHandler);
-    this.#filmDetailsViewComponent.setEmojiesClickHandler();
 
   };
 
-  removeFilmDetailsComponent = () => {
-    this.#filmDetailsViewComponent.element.remove();
-    this.#filmDetailsViewComponent = null;
-    this.#filmDetailsContainer.classList.remove('hide-overflow');
+  #watchlistBtnClickHandler = () => {
+    this.#changeData(
+      UserAction.UPDATE_FILM,
+      UpdateType.PATCH,
+      {
+        ...this.#film, userDetails: {
+          ...this.#film.userDetails, watchlist: !this.#film.userDetails.watchlist
+        },
+      }
+    );
   };
 
-  #onEscKeyDown = (evt) => {
-    if (evt.key === 'Escape' || evt.key === 'Esc') {
-      evt.preventDefault();
-      this.#removeFilmDetailsPresenter();
-      document.removeEventListener('keydown', this.#onEscKeyDown);
+  #watchedBtnClickHandler = () => {
+    this.#changeData(
+      UserAction.UPDATE_FILM,
+      UpdateType.PATCH,
+      {
+        ...this.#film, userDetails: {
+          ...this.#film.userDetails, watched: !this.#film.userDetails.watched
+        },
+      }
+    );
+  };
+
+  #favoriteBtnClickHandler = () => {
+    this.#changeData(
+      UserAction.UPDATE_FILM,
+      UpdateType.PATCH,
+      {
+        ...this.#film, userDetails: {
+          ...this.#film.userDetails, favorite: !this.#film.userDetails.favorite
+        },
+      }
+    );
+  };
+
+  #commentAddClickHandler = () => {
+    const newCommentId = (1 + this.#totalCommentsAmount).toString();
+    const newComment = {
+      id: newCommentId,
+      author: 'Ivan',
+      comment: this.#viewData.comment,
+      emotion: (this.#viewData.emotion) ? this.#viewData.emotion : 'smile',
+      date: dayjs().format(),
+    };
+
+    this.#changeData(
+      UserAction.ADD_COMMENT,
+      UpdateType.PATCH,
+      {
+        ...this.#film,
+        comments: [
+          ...this.#film.comments.concat(newCommentId)
+        ]
+      },
+      newComment
+    );
+
+  };
+
+  #commentDeleteClickHandler = (commentId) => {
+    const filmCommentIdIndex = this.#film.comments
+      .findIndex((filmCommentId) => filmCommentId === commentId);
+
+    const deletedComment = this.#comments
+      .find((comment) => comment.id === commentId);
+
+    this.#changeData(
+      UserAction.DELETE_COMMENT,
+      UpdateType.PATCH,
+      {
+        ...this.#film,
+        comments: [
+          ...this.#film.comments.slice(0, filmCommentIdIndex),
+          ...this.#film.comments.slice(filmCommentIdIndex + 1)
+        ]
+      },
+      deletedComment
+    );
+  };
+
+  destroy = () => {
+    if (this.#filmDetailsViewComponent) {
+      this.#filmDetailsViewComponent.element.remove();
+      this.#filmDetailsViewComponent = null;
     }
   };
 
-  #filmButtonClickHandler = (key, state) => {
-    this.#filmModel.filmInfo[key] = state;
-    // console.log(this.#filmModel.filmInfo[key]);
+  #onKeyDown = (evt) => {
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
+      evt.preventDefault();
+      document.removeEventListener('keydown', this.#onKeyDown);
+      this.destroy();
+    } else {
+      if (evt.key === 'Enter' && (evt.ctrlKey || evt.metaKey)) {
+        evt.preventDefault();
+        this.#filmDetailsViewComponent.updateCommentData();
+        if (this.#viewData.comment) {
+          this.#commentAddClickHandler();
+        }
+      }
+    }
   };
 
+  clearViewData = () => {
+    this.#viewData.comment = null;
+    this.#viewData.emotion = null;
+  };
+
+
+  setDeleting = (commentId) => {
+    this.#filmDetailsViewComponent.updateElement({
+      isDeleting: true,
+      deletedComment: commentId,
+    });
+  };
+
+  setSaving = () => {
+    this.#filmDetailsViewComponent.updateElement({
+      isDisabled: true,
+    });
+  };
+
+  setAbortingAddComment = () => {
+    this.#filmDetailsViewComponent.setScrollPosition();
+    this.#filmDetailsViewComponent.updateElement({ isDisabled: false, isDeleting: false });
+    this.#filmDetailsViewComponent.shakeNewCommentForm();
+  };
+
+  setAbortingDeleteComment = (commentId) => {
+    this.#filmDetailsViewComponent.setScrollPosition();
+    this.#filmDetailsViewComponent.updateElement({ isDisabled: false, isDeleting: false });
+    this.#filmDetailsViewComponent.shakeDeleting(commentId);
+  };
+
+  setAbortingUpdateFilm = () => {
+    this.#filmDetailsViewComponent.updateElement({ isDisabled: false, isDeleting: false });
+    this.#filmDetailsViewComponent.shakeControls();
+  };
+
+  #updateViewData = (viewData) => {
+    this.#viewData = { ...viewData };
+  };
 }

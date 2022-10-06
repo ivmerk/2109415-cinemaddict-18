@@ -1,5 +1,5 @@
 import ShowMoreButtonView from '../view/show-more-botton-view.js';
-import { render } from '../framework/render.js';
+import { render, RenderPosition } from '../framework/render.js';
 
 export default class ShowMoreButtonPresenter {
   #showMoreFilmsButtonComponent = null;
@@ -13,7 +13,7 @@ export default class ShowMoreButtonPresenter {
   }
 
   init = () => {
-    render(this.#showMoreFilmsButtonComponent, this.#showMoreFilmsButtonContainer);
+    render(this.#showMoreFilmsButtonComponent, this.#showMoreFilmsButtonContainer, RenderPosition.BEFOREEND);
     this.#showMoreFilmsButtonComponent.setClickHandler(this.#filmButtonMoreClickHandler);
   };
 

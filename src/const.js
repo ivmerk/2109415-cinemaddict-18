@@ -2,31 +2,61 @@ const FILM_COUNT = 15;
 
 const FILM_COUNT_PER_STEP = 5;
 
-const NAVIGATIONFILTERTYPES = [
-  'all',
-  'watchlist',
-  'history',
-  'favorites'
-];
+const Method = {
+  GET: 'GET',
+  PUT: 'PUT',
+  POST: 'POST',
+  DELETE: 'DELETE',
+};
 
-const SORTINGFILTERTYPES = {
+const FilterType = {
+  ALL: 'all',
+  WATCHLIST: 'watchlist',
+  HISTORY: 'history',
+  FAVORITES: 'favorites',
+};
+
+const SortingFiltersType = {
   DEFAULT: 'default',
   DATE: 'date',
   RATING: 'rating',
 };
-const EMOTIONS = ['smile', 'sleeping', 'puke', 'angry'];
+const emotionType = ['smile', 'sleeping', 'puke', 'angry'];
 
-const FILMCONTROLTYPES = {
+const FilmControlType = {
   isInWatchlist: 'watchlist',
   isWatched: 'watched',
   isFavorite: 'favorite',
 };
 
+const UserStatusTitle = {
+  NOVICE: 'Novice',
+  FAW: 'Fan',
+  MOVIE_BUFF: 'Movie Buff',
+};
+
+const UserAction = {
+  UPDATE_FILM: 'UPDATE_FILM',
+  ADD_COMMENT: 'ADD_COMMENT',
+  DELETE_COMMENT: 'DELETE_COMMENT',
+};
+
+const UpdateType = {
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+  MAJOR: 'MAJOR',
+  INIT: 'INIT',
+};
+
 export {
-  SORTINGFILTERTYPES,
-  NAVIGATIONFILTERTYPES,
+  Method,
+  SortingFiltersType,
+  FilterType,
   FILM_COUNT,
   FILM_COUNT_PER_STEP,
-  EMOTIONS,
-  FILMCONTROLTYPES
+  emotionType,
+  FilmControlType,
+  UserStatusTitle,
+  UserAction,
+  UpdateType,
 };

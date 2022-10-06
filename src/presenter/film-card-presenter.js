@@ -1,47 +1,104 @@
-import { render } from '../framework/render.js';
+import { render, replace, remove } from '../framework/render.js';
 import FilmCardView from '../view/film-card-view.js';
-import FilmDetailsPresenter from './film-details-presenter.js';
+import { UserAction, UpdateType } from '../const';
 
 export default class FilmCardPresenter {
   #filmCardViewComponent = null;
-  #filmListContainer = null;
-  #commentsModel = null;
+  #container = null;
   #film = null;
-  #closeFilmDetailView = null;
+  #clickCardHandler = null;
+  #escKeyDownHandler = null;
   isPopup = false;
-  #filmDetailsPresenter = null;
+  #changeData = null;
+  id = null;
 
-  constructor(filmListContainer, closeFilmDetailsView) {
-    this.#filmListContainer = filmListContainer;
-    this.#closeFilmDetailView = closeFilmDetailsView;
+  constructor(container, changeData, clickCardHandler, escKeyDownHandler) {
+    this.#container = container;
+    this.#changeData = changeData;
+    this.#clickCardHandler = clickCardHandler;
+    this.#escKeyDownHandler = escKeyDownHandler;
   }
 
-  init = (film, comments) => {
-    this.#commentsModel = comments;
+  get element() {
+    return this.#filmCardViewComponent.element;
+  }
+
+  init = (film) => {
     this.#film = film;
-    this.#filmCardViewComponent = new FilmCardView(film, this.#commentsModel);
-    this.#filmCardViewComponent.setCardClickHandler(this.#filmCardClickHandler);
-    this.#filmCardViewComponent.setButtonClickHandler(this.#filmButtonClickHandler);
-    render(this.#filmCardViewComponent, this.#filmListContainer);
-  };
 
-  #filmButtonClickHandler = (key, state) => {
-    this.#film.filmInfo[key] = state;
-  };
+    const prevFilmCardComponent = this.#filmCardViewComponent;
 
-  removeFilmDetailsPresenter = () => {
-    if (this.#filmDetailsPresenter) {
-      this.isPopup = false;
-      this.#filmDetailsPresenter.removeFilmDetailsComponent();
+    this.#filmCardViewComponent = new FilmCardView(film);
+    this.id = this.#film.id;
+    this.#setHandles();
+
+    if (prevFilmCardComponent === null) {
+      render(this.#filmCardViewComponent, this.#container);
+    } else {
+      replace(this.#filmCardViewComponent, prevFilmCardComponent);
     }
   };
 
-  #filmCardClickHandler = (film, comments) => {
-    this.#closeFilmDetailView();
-    const siteBodyElement = document.querySelector('body');
-    this.#filmDetailsPresenter = new FilmDetailsPresenter(siteBodyElement, this.removeFilmDetailsPresenter);
-    this.isPopup = true;
-    this.#filmDetailsPresenter.init(film, comments);
+  #setHandles = () => {
+    this.#filmCardViewComponent.setCardClickHandler(() => {
+      this.#clickCardHandler(this.#film);
+      document.addEventListener('keydown', this.#escKeyDownHandler);
+    });
+    this.#filmCardViewComponent.setWatchlistBtnClickHandler(this.#watchlistBtnClickHandler);
+    this.#filmCardViewComponent.setWatchedBtnClickHandler(this.#watchedBtnClickHandler);
+    this.#filmCardViewComponent.setFavoriteBtnClickHandler(this.#favoriteBtnClickHandler);
+  };
+
+  #watchlistBtnClickHandler = () => {
+    this.#changeData(
+      UserAction.UPDATE_FILM,
+      UpdateType.PATCH,
+      {
+        ...this.#film, userDetails: {
+          ...this.#film.userDetails, watchlist: !this.#film.userDetails.watchlist
+        },
+      }
+    );
+  };
+
+  #watchedBtnClickHandler = () => {
+    this.#changeData(
+      UserAction.UPDATE_FILM,
+      UpdateType.PATCH,
+      {
+        ...this.#film, userDetails: {
+          ...this.#film.userDetails, watched: !this.#film.userDetails.watched
+        },
+      }
+    );
+  };
+
+  #favoriteBtnClickHandler = () => {
+    this.#changeData(
+      UserAction.UPDATE_FILM,
+      UpdateType.PATCH,
+      {
+        ...this.#film, userDetails: {
+          ...this.#film.userDetails, favorite: !this.#film.userDetails.favorite
+        },
+      }
+    );
+  };
+
+  setSaving = () => {
+    this.#filmCardViewComponent.updateElement({
+      isDisabled: true,
+    });
+  };
+
+  setAborting = () => {
+    this.#filmCardViewComponent.updateElement({ isDisabled: false });
+    this.#filmCardViewComponent.shakeControls();
+  };
+
+
+  destroy = () => {
+    remove(this.#filmCardViewComponent);
   };
 
 }
