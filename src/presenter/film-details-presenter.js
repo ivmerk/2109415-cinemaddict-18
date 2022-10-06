@@ -5,6 +5,7 @@ import dayjs from 'dayjs';
 
 export default class FilmDetailsPresenter {
   #filmDetailsViewComponent = null;
+
   #container = null;
   #comments = null;
   #film = null;
@@ -58,6 +59,7 @@ export default class FilmDetailsPresenter {
     this.#closeButtonDetailsElement.addEventListener('click', () => {
       this.#closeBtnClickHandler();
       document.removeEventListener('keydown', this.#onKeyDown);
+
     });
     this.#filmDetailsViewComponent.setWatchlistBtnClickHandler(this.#watchlistBtnClickHandler);
     this.#filmDetailsViewComponent.setWatchedBtnClickHandler(this.#watchedBtnClickHandler);
