@@ -10,7 +10,6 @@ import FilmDetailsPresenter from './film-details-presenter.js';
 import NoFilmsView from '../view/nofilms-view.js';
 import SortFilltersMenuView from '../view/sort-fillters-menu-view.js';
 import FilmListLoadingView from '../view/film-list-loading-view.js';
-// import TopRatedPresenter from './top-rated-presenter.js';
 import TopRatedView from '../view/top-rated-view.js';
 import MostCommentedView from '../view/most-commendet-view.js';
 import FilmsView from '../view/films-view.js';
@@ -35,9 +34,7 @@ export default class FilmsListPresenter {
   #isCommentLoadingError = false;
   #topRatedFilms = null;
   #topCommentedFilms = null;
-  #mostCommentedFilmCardPresenter = null;
   #mostCommentedCardPresenters = [];
-  #mostRatedFilmCardPresenter = null;
   #mostRatedCardPresenters = [];
 
   #renderedFilmCount = FILM_COUNT_PER_STEP;
@@ -84,16 +81,6 @@ export default class FilmsListPresenter {
     }
   };
 
-  #findTopRatedFilms = (films) => {
-    const sortedRatedFilms = films.sort(sortByRate);
-    return [sortedRatedFilms[0], sortedRatedFilms[1]];
-
-  };
-
-  #findTopCommentedFilms = (films) => {
-    const sortedCommentedFilms = films.sort(sortByComments);
-    return [sortedCommentedFilms[0], sortedCommentedFilms[1]];
-  };
 
   #handleViewAction = async (actionType, updateType, updateFilm, updateComment) => {
     switch (actionType) {
@@ -122,12 +109,12 @@ export default class FilmsListPresenter {
         }
         break;
       case UserAction.DELETE_COMMENT:
-        this.#filmDetailsPresenter.setDeleting();
+        this.#filmDetailsPresenter.setDeleting(updateComment.id);
         try {
           await this.#commentsModel.delete(updateType, updateComment, updateFilm);
           await this.#filmsModel.update(updateType, updateFilm);
         } catch (err) {
-          this.#filmDetailsPresenter.setAbortingDeleteComment();
+          this.#filmDetailsPresenter.setAbortingDeleteComment(updateComment.id);
         }
         break;
     }
@@ -173,6 +160,18 @@ export default class FilmsListPresenter {
     this.#clearFilmList({ resetRenderedTaskCount: true });
     this.#renderBoard();
   };
+
+  #findTopRatedFilms = (films) => {
+    const sortedRatedFilms = films.sort(sortByRate);
+    return [sortedRatedFilms[0], sortedRatedFilms[1]];
+
+  };
+
+  #findTopCommentedFilms = (films) => {
+    const sortedCommentedFilms = films.sort(sortByComments);
+    return [sortedCommentedFilms[0], sortedCommentedFilms[1]];
+  };
+
 
   #renderSort = () => {
     this.#sortComponent = new SortFilltersMenuView(this.#currentSortType);
