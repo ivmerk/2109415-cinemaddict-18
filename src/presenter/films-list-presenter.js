@@ -127,7 +127,7 @@ export default class FilmsListPresenter {
           await this.#commentsModel.delete(updateType, updateComment, updateFilm);
           await this.#filmsModel.update(updateType, updateFilm);
         } catch (err) {
-          this.#filmDetailsPresenter.setAbortingDeleteComment(updateComment.id);
+          this.#filmDetailsPresenter.setAbortingDeleteComment();
         }
         break;
     }

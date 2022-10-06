@@ -32,25 +32,22 @@ const formatMinutesToTime = (minutes) => dayjs.duration(minutes, 'minutes').form
 const sortByDate = (filmA, filmB) => {
   if (filmA.filmInfo.release.date < filmB.filmInfo.release.date) {
     return 1;
-  } else {
-    return -1;
   }
+  return -1;
 };
 
 const sortByRate = (filmA, filmB) => {
   if (filmA.filmInfo.totalRating < filmB.filmInfo.totalRating) {
     return 1;
-  } else {
-    return -1;
   }
+  return -1;
 };
 
 const sortByComments = (filmA, filmB) => {
   if (filmA.comments.length < filmB.comments.length) {
     return 1;
-  } else {
-    return -1;
   }
+  return -1;
 };
 
 export { sortByComments, sortByDate, sortByRate, getRandomInteger, getRandomValue, getRandomFloat, formatStringToDateWithTime, formatStringToDate, formatStringToYear, formatMinutesToTime };
